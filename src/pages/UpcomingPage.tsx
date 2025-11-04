@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
-import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, FloatButton } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
-import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
+import UpcomingDrawer from '../components/UpcomingDrawer';
 import '../styles/components/HeroSection.less';
 import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
@@ -19,6 +20,7 @@ const UpcomingPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const paymentMessageRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<CarouselRef>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // WhatsApp Icon Component
   const WhatsAppIcon = () => (
@@ -668,6 +670,28 @@ const UpcomingPage: React.FC = () => {
           </Space>
         </Card>
       </div>
+
+      {/* Upcoming Adventures Drawer */}
+      <UpcomingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+
+      {/* Floating Action Button */}
+      <FloatButton
+        icon={<ThunderboltOutlined />}
+        type="primary"
+        tooltip={<div>More Upcoming Adventures</div>}
+        onClick={() => setDrawerOpen(true)}
+        style={{
+          right: 24,
+          bottom: 24,
+          width: 56,
+          height: 56,
+          background: isDarkMode ? '#ffffff' : '#1a1a1a',
+          color: isDarkMode ? '#1a1a1a' : '#ffffff',
+          boxShadow: isDarkMode 
+            ? '0 4px 16px rgba(255, 255, 255, 0.3)' 
+            : '0 4px 16px rgba(0, 0, 0, 0.4)'
+        }}
+      />
     </div>
   );
 };
