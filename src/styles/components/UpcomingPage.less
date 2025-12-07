@@ -13,6 +13,8 @@
 .upcoming-page-container {
   min-height: 100vh;
   transition: background-color 0.3s ease;
+  overflow-x: hidden;
+  width: 100%;
   
   &.light-mode {
     background: @light-bg;
@@ -54,18 +56,15 @@
 
 // Trek main card with better mobile styling
 .trek-main-card {
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   @media (max-width: 480px) {
     margin-bottom: 24px;
-    
-    .ant-row {
-      margin-left: 0;
-      margin-right: 0;
-    }
-    
-    .ant-col {
-      padding-left: 0;
-      padding-right: 0;
-    }
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
