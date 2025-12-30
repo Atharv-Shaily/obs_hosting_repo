@@ -9,6 +9,7 @@ import sceneryOtw from '../assets/treks/yulla/scenery-otw.jpg';
 import groupSummit from '../assets/treks/yulla/group-summit.png';
 import groupSummitSpiti from '../assets/treks/spiti/group-mountain.png';
 import dayaraGroup from '../assets/treks/dayara/dayara_group.jpg';
+import groupPreviousKuari from '../assets/treks/kuari/group-previous.png';
 import tejasviTestimonial from '../assets/testimonials/tejasvi.jpg';
 import pranathiTestimonial from '../assets/testimonials/pranathi.jpg';
 
@@ -50,6 +51,17 @@ const DiariesPage: React.FC = () => {
       participants: 7,
       duration: '8 days',
       difficulty: 'Easy to Moderate'
+    },
+    {
+      id: 4,
+      title: 'Kuari Pass - Winter Wonderland Trek',
+      date: 'December 2025',
+      location: 'Garhwal Himalayas, Uttarakhand',
+      image: groupPreviousKuari,
+      description: 'Experienced the magic of winter in the Garhwal Himalayas with breathtaking views of snow-capped peaks including Nanda Devi, Trishul, and Dronagiri. An unforgettable journey through pristine snow-covered trails.',
+      participants: 20,
+      duration: '5 days',
+      difficulty: 'Moderate'
     }
   ];
 
@@ -116,6 +128,24 @@ const DiariesPage: React.FC = () => {
       experience: 'Dayara Bugyal Trek',
       review: 'Amazing alpine meadow adventure! The signature OBS experiences like Happiness Sharing and Alpine Olympics made this trek truly special. Highly recommended!',
       date: 'June 2025'
+    },
+    {
+      id: 8,
+      name: 'Ankit Verma',
+      location: 'Delhi',
+      rating: 5,
+      experience: 'Kuari Pass Trek',
+      review: 'The Kuari Pass winter trek was absolutely magical! Walking through snow-covered trails with stunning views of Nanda Devi was a dream come true. Yatharth and the team ensured our safety and comfort throughout. Highly recommend OBS for an authentic Himalayan experience!',
+      date: 'December 2025'
+    },
+    {
+      id: 9,
+      name: 'Neha Kapoor',
+      location: 'Pune',
+      rating: 5,
+      experience: 'Kuari Pass Trek',
+      review: 'Best winter trek experience! The snow-covered landscapes, the warmth of the group, and OBS signature activities made this trip unforgettable. From sunrise views at Kuari Pass to the cozy evenings - everything was perfect!',
+      date: 'December 2025'
     }
   ];
 

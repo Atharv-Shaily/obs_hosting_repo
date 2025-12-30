@@ -4,7 +4,6 @@ import type { CarouselRef } from 'antd/es/carousel';
 import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
-import { kuariPassData } from '../assets/treks/kuari/KuariPassData';
 import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
 import { kedarkanthaData } from '../assets/treks/kedarkantha/KedarkanthaData';
 import { sandakphuData } from '../assets/treks/sandakhpu/SandakphuData';
@@ -22,7 +21,6 @@ const { Title, Paragraph, Text } = Typography;
 
 // All available treks
 const allTreks: TrekData[] = [
-  kuariPassData,
   kedarkanthaData,
   sandakphuData,
   brahmatalData
@@ -50,17 +48,17 @@ const UpcomingPage: React.FC = () => {
   );
 
   const handleBookNow = () => {
-    // Only Kuari Pass uses the modal, scroll to booking section for it
-    if (selectedTrek.id === 'kuari-pass') {
+    // Scroll to booking section or open registration link
+    if (selectedTrek.registrationLink) {
+      // Treks with registration link - open it
+      window.open(selectedTrek.registrationLink, '_blank');
+    } else {
+      // Scroll to booking section
       paymentMessageRef.current?.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
       });
-    } else if (selectedTrek.registrationLink) {
-      // Other treks with registration link - open it
-      window.open(selectedTrek.registrationLink, '_blank');
     }
-    // If no registration link yet for other treks, do nothing
   };
 
   const handleDownloadBrochure = () => {
@@ -101,7 +99,6 @@ const UpcomingPage: React.FC = () => {
         return brahmatalHero;
       case 'sandakphu':
         return sandakphuHero;
-      case 'kuari-pass':
       default:
         return grasslandMountain;
     }
@@ -129,8 +126,8 @@ const UpcomingPage: React.FC = () => {
           '--mobile-bg': `url(${getHeroImage()})`
         } as React.CSSProperties}
       >
-        <div className={`hero-overlay ${selectedTrek.id !== 'kuari-pass' ? 'hide-on-mobile' : ''}`} />
-        <div className={`hero-content ${selectedTrek.id !== 'kuari-pass' ? 'hide-on-mobile' : ''}`}>
+        <div className="hero-overlay hide-on-mobile" />
+        <div className="hero-content hide-on-mobile">
           <Title level={1} className="hero-title">
             Upcoming OBS Experiences
           </Title>
@@ -666,11 +663,8 @@ const UpcomingPage: React.FC = () => {
                         type="primary" 
                         size="large"
                         onClick={() => {
-                          // Only Kuari Pass opens the modal
-                          if (selectedTrek.id === 'kuari-pass') {
-                            setBookingModalOpen(true);
-                          } else if (selectedTrek.registrationLink) {
-                            // Other treks with registration link
+                          if (selectedTrek.registrationLink) {
+                            // Treks with registration link
                             window.open(selectedTrek.registrationLink, '_blank');
                           }
                           // If no registration link yet, do nothing

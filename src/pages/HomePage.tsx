@@ -134,7 +134,7 @@ const HomePage: React.FC = () => {
                   textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.5)' : '0 2px 4px rgba(0,0,0,0.1)'
                 }}
               >
-                🏔️ Kuari Pass Trek is Coming Back!
+                🏔️ Kedarkantha Trek - Winter Summit Adventure!
               </Title>
               <Paragraph 
                 style={{ 
@@ -144,7 +144,7 @@ const HomePage: React.FC = () => {
                   fontWeight: '600'
                 }}
               >
-                December 25-30, 2025 • Winter Wonderland Experience
+                January 25-29, 2026 • Summit the Majestic Peak
               </Paragraph>
             </div>
             
@@ -157,9 +157,9 @@ const HomePage: React.FC = () => {
                 lineHeight: '1.6'
               }}
             >
-              After the incredible success of our previous Kuari Pass adventures, we're excited to announce 
-              our upcoming winter trek! Experience the magic of snow-covered trails and breathtaking 
-              Himalayan views.
+              Join us for an unforgettable winter adventure to the summit of Kedarkantha at 12,500 feet! 
+              Experience pristine snow-covered trails, stunning 360° Himalayan views, and camping under 
+              starlit skies.
             </Paragraph>
             
             <Button 
