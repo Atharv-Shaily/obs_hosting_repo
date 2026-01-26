@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Kuari Pass Coming Soon Section */}
+      {/* Featured Trek Section */}
       <div className="kuari-coming-soon" style={{ 
         padding: '40px 24px', 
         maxWidth: '1200px', 
@@ -134,7 +134,7 @@ const HomePage: React.FC = () => {
                   textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.5)' : '0 2px 4px rgba(0,0,0,0.1)'
                 }}
               >
-                🏔️ Kedarkantha Trek - Winter Summit Adventure!
+                🏔️ Brahmatal Trek - Frozen Lake Adventure!
               </Title>
               <Paragraph 
                 style={{ 
@@ -144,7 +144,7 @@ const HomePage: React.FC = () => {
                   fontWeight: '600'
                 }}
               >
-                January 25-29, 2026 • Summit the Majestic Peak
+                March 26-31, 2026 • Frozen Alpine Lake & Himalayan Views
               </Paragraph>
             </div>
             
@@ -157,9 +157,9 @@ const HomePage: React.FC = () => {
                 lineHeight: '1.6'
               }}
             >
-              Join us for an unforgettable winter adventure to the summit of Kedarkantha at 12,500 feet! 
-              Experience pristine snow-covered trails, stunning 360° Himalayan views, and camping under 
-              starlit skies.
+              Join us for an enchanting winter trek to the frozen Brahmatal Lake! Experience stunning 180° 
+              Himalayan views, snow-covered oak & rhododendron forests, golden sunsets, and camping under 
+              star-filled skies.
             </Paragraph>
             
             <Button 
