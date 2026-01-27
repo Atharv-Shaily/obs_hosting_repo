@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { HomeOutlined, BookOutlined, CalendarOutlined, TeamOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import DarkModeToggle from './DarkModeToggle';
+import FloatingContactButtons from './FloatingContactButtons';
 import obsLogo from '../assets/obsLogo.png';
 import '../styles/components/Layout.less';
 
@@ -75,7 +76,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Content className={`layout-content ${isDarkMode ? 'dark' : ''}`}>
         {children}
       </Content>
-      
+
+      <FloatingContactButtons />
+
       <Footer className={`layout-footer ${isDarkMode ? 'dark' : 'light'}`}>
         Oh-Bhaisahab Experiences ©2025 Created with ❤️ for Adventure Seekers
       </Footer>
