@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, Tabs } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
 import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { useSearchParams } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
 import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
-import { kedarkanthaData } from '../assets/treks/kedarkantha/KedarkanthaData';
 import { sandakphuData } from '../assets/treks/sandakhpu/SandakphuData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
@@ -13,7 +13,6 @@ import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
-import kedarkanthaHero from '../assets/treks/kedarkantha/kedarkantha.jpg';
 import brahmatalHero from '../assets/treks/bhramtal/bhramtal.jpg';
 import sandakphuHero from '../assets/treks/sandakhpu/sandakhpu.jpg';
 
@@ -21,18 +20,47 @@ const { Title, Paragraph, Text } = Typography;
 
 // All available treks
 const allTreks: TrekData[] = [
-  kedarkanthaData,
-  sandakphuData,
-  brahmatalData
+  brahmatalData,
+  sandakphuData
+  
 ];
 
 const UpcomingPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
+  const [searchParams, setSearchParams] = useSearchParams();
   const paymentMessageRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<CarouselRef>(null);
   const trekContentRef = useRef<HTMLDivElement>(null);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
-  const [selectedTrek, setSelectedTrek] = useState<TrekData>(allTreks[0]);
+  
+  // Initialize selected trek from URL parameter or default to first trek
+  const getInitialTrek = (): TrekData => {
+    const trekId = searchParams.get('trek');
+    if (trekId) {
+      const trek = allTreks.find(t => t.id === trekId);
+      if (trek) return trek;
+    }
+    return allTreks[0];
+  };
+  
+  const [selectedTrek, setSelectedTrek] = useState<TrekData>(getInitialTrek());
+  
+  // Update selected trek when URL parameter changes
+  useEffect(() => {
+    const trekId = searchParams.get('trek');
+    if (trekId) {
+      const trek = allTreks.find(t => t.id === trekId);
+      if (trek) {
+        setSelectedTrek(prevTrek => {
+          if (prevTrek.id !== trek.id) {
+            carouselRef.current?.goTo(0);
+            return trek;
+          }
+          return prevTrek;
+        });
+      }
+    }
+  }, [searchParams]);
 
   // WhatsApp Icon Component
   const WhatsAppIcon = () => (
@@ -74,6 +102,8 @@ const UpcomingPage: React.FC = () => {
     const trek = allTreks.find(t => t.id === key);
     if (trek) {
       setSelectedTrek(trek);
+      // Update URL parameter to reflect selected trek
+      setSearchParams({ trek: key });
       // Reset carousel when changing treks
       carouselRef.current?.goTo(0);
       
@@ -93,8 +123,6 @@ const UpcomingPage: React.FC = () => {
   // Get hero image based on selected trek
   const getHeroImage = () => {
     switch (selectedTrek.id) {
-      case 'kedarkantha':
-        return kedarkanthaHero;
       case 'brahmatal':
         return brahmatalHero;
       case 'sandakphu':
@@ -358,7 +386,7 @@ const UpcomingPage: React.FC = () => {
         </Card>
 
         {/* Highlights */}
-        <Card title="Trek Highlights" style={{ marginBottom: '40px', borderRadius: '12px' }}>
+        <Card title="OBS Experience Highlights" style={{ marginBottom: '40px', borderRadius: '12px' }}>
           <Row gutter={[32, 32]}>
             {/* Video Section - Only show if videoUrl exists */}
             {selectedTrek.videoUrl && (

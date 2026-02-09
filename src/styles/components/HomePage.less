@@ -49,6 +49,224 @@
   }
 }
 
+// Featured Treks Section
+.featured-treks-section {
+  padding: 60px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 28px;
+
+    &.dark-mode {
+      color: #e5e5e5;
+    }
+  }
+}
+
+.featured-trek-card {
+  border-radius: 16px;
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  &.dark-mode {
+    background: #1a1a1a;
+    border-color: #404040;
+  }
+
+  .featured-trek-image-container {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+
+    .featured-trek-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.3s ease;
+    }
+
+    .featured-trek-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+
+      .live-tag {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 600;
+        padding: 4px 12px;
+
+        .live-dot {
+          width: 8px;
+          height: 8px;
+          background: white;
+          border-radius: 50%;
+          animation: blink 1.5s infinite;
+        }
+      }
+    }
+  }
+
+  &:hover .featured-trek-image {
+    transform: scale(1.05);
+  }
+
+  .featured-trek-content {
+    padding: 8px 0;
+
+    .featured-trek-title {
+      margin-bottom: 4px;
+      font-size: 22px;
+    }
+
+    .featured-trek-subtitle {
+      color: @primary-color;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .featured-trek-tags {
+      margin-bottom: 12px;
+    }
+
+    .featured-trek-location {
+      color: #666;
+      margin-bottom: 12px;
+      font-size: 14px;
+
+      .anticon {
+        color: @primary-color;
+        margin-right: 6px;
+      }
+    }
+
+    .featured-trek-highlights {
+      margin: 0 0 16px 0;
+      padding-left: 20px;
+
+      li {
+        margin-bottom: 4px;
+        color: #555;
+        font-size: 14px;
+      }
+    }
+
+    .featured-trek-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+
+      .featured-trek-price {
+        .price {
+          font-size: 24px;
+          font-weight: 700;
+          color: #52c41a;
+        }
+
+        .price-note {
+          display: block;
+          font-size: 12px;
+          color: #999;
+        }
+      }
+    }
+  }
+
+  &.dark-mode {
+    .featured-trek-content {
+      .featured-trek-location {
+        color: #a3a3a3;
+      }
+
+      .featured-trek-highlights li {
+        color: #d4d4d4;
+      }
+
+      .featured-trek-footer {
+        border-top-color: #404040;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0.4;
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .featured-treks-section {
+    padding: 40px 16px;
+
+    .section-title {
+      font-size: 24px;
+    }
+  }
+
+  .featured-trek-card {
+    .featured-trek-image-container {
+      height: 180px;
+    }
+
+    .featured-trek-content {
+      .featured-trek-title {
+        font-size: 20px;
+      }
+
+      .featured-trek-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+
+        .ant-btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-treks-section {
+    padding: 32px 12px;
+  }
+
+  .featured-trek-card {
+    .featured-trek-image-container {
+      height: 160px;
+    }
+
+    .featured-trek-content {
+      .featured-trek-title {
+        font-size: 18px;
+      }
+
+      .featured-trek-subtitle {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
 // About OBS Section
 .about-section {
   padding: 80px 24px;
