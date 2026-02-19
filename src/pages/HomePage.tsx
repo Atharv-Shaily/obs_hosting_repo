@@ -103,6 +103,11 @@ const HomePage: React.FC = () => {
                       <Title level={3} className="featured-trek-title">
                         {featuredTreks[0].title}
                       </Title>
+                      {(featuredTreks[0] as { badgeLabel?: string }).badgeLabel && (
+                        <Tag color="purple" className="featured-trek-badge">
+                          {(featuredTreks[0] as { badgeLabel?: string }).badgeLabel}
+                        </Tag>
+                      )}
                       <Paragraph className="featured-trek-subtitle">
                         {featuredTreks[0].subtitle}
                       </Paragraph>
@@ -117,15 +122,18 @@ const HomePage: React.FC = () => {
                       </div>
                       
                       <ul className="featured-trek-highlights">
-                        {featuredTreks[0].highlights.map((h, i) => (
+                        {featuredTreks[0]?.highlights?.map((h, i) => (
                           <li key={i}>{h}</li>
                         ))}
                       </ul>
                       
                       <div className="featured-trek-footer">
                         <div className="featured-trek-price">
+                          {(featuredTreks[0] as { originalPrice?: string }).originalPrice && (
+                            <span className="price-original">{(featuredTreks[0] as { originalPrice?: string }).originalPrice}</span>
+                          )}
                           <span className="price">{featuredTreks[0].price}</span>
-                          <span className="price-note">{featuredTreks[0].priceNote}</span>
+                          {featuredTreks[0].priceNote && <span className="price-note">{featuredTreks[0].priceNote}</span>}
                         </div>
                         <Button 
                           type="primary" 
@@ -171,6 +179,11 @@ const HomePage: React.FC = () => {
                     <Title level={3} className="featured-trek-title">
                       {trek.title}
                     </Title>
+                    {(trek as { badgeLabel?: string }).badgeLabel && (
+                      <Tag color="purple" className="featured-trek-badge">
+                        {(trek as { badgeLabel?: string }).badgeLabel}
+                      </Tag>
+                    )}
                     <Paragraph className="featured-trek-subtitle">
                       {trek.subtitle}
                     </Paragraph>
@@ -185,15 +198,18 @@ const HomePage: React.FC = () => {
                     </div>
                     
                     <ul className="featured-trek-highlights">
-                      {trek.highlights.map((h, i) => (
+                      {trek.highlights?.map((h, i) => (
                         <li key={i}>{h}</li>
                       ))}
                     </ul>
                     
                     <div className="featured-trek-footer">
                       <div className="featured-trek-price">
+                        {(trek as { originalPrice?: string }).originalPrice && (
+                          <span className="price-original">{(trek as { originalPrice?: string }).originalPrice}</span>
+                        )}
                         <span className="price">{trek.price}</span>
-                        <span className="price-note">{trek.priceNote}</span>
+                        {trek.priceNote && <span className="price-note">{trek.priceNote}</span>}
                       </div>
                       <Button 
                         type="primary" 

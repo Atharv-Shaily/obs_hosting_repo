@@ -15,6 +15,10 @@ export type PricingDetails = {
   remainingAmountWithTransport: number;
   remainingAmountWithoutTransport: number;
   paymentDeadline: string;
+  /** Original price before discount (e.g. for early-bird display) */
+  originalPrice?: number;
+  /** Number of seats left at discounted price (e.g. "Only 2 seats left") */
+  earlyBirdSeatsLeft?: number;
 }
 
 export type TrekData = {
@@ -25,7 +29,8 @@ export type TrekData = {
   difficulty: string;
   location: string;
   images: string[];
-  brochure: string;
+  /** Optional – omit for treks without a brochure (e.g. Kerala) */
+  brochure?: string;
   description: string;
   highlights: string[];
   itinerary: Array<{
@@ -46,5 +51,10 @@ export type TrekData = {
   videoUrl?: string;
   transportationRoute?: string;
   registrationLink?: string; // For direct registration (non-modal booking)
+  /** Highlight as "All girls trip" */
+  allGirlsTrip?: boolean;
+  /** Special package note (e.g. "Pilani to Pilani - call for details") */
+  specialPackageNote?: string;
+  specialPackagePhone?: string;
 }
 

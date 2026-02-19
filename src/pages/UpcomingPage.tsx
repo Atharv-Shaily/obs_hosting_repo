@@ -1,11 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, Tabs } from 'antd';
+import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, Tabs, Modal } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
 import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useSearchParams } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
 import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
+import { nagtibbaData } from '../assets/treks/nagtibba/NagtibbaData';
+import { keralaData } from '../assets/treks/kerala/KeralaData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import '../styles/components/UpcomingPage.less';
@@ -14,13 +16,18 @@ import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
 import brahmatalHero from '../assets/treks/bhramtal/bhramtal.jpg';
 import sandakphuHero from '../assets/treks/sandakhpu/sandakhpu.jpg';
+// Placeholder heroes for Nagtibba and Kerala – replace when images are ready
+import nagtibbaHero from '../assets/treks/bhramtal/bhramtal.jpg';
+import keralaHero from '../assets/treks/bhramtal/bhramtal.jpg';
+import upiImage from '../assets/upi.jpg';
 
 const { Title, Paragraph, Text } = Typography;
 
-// All available treks
+// All available treks (order: Brahmatal, Nagtibba, Kerala)
 const allTreks: TrekData[] = [
-  brahmatalData
-  
+  brahmatalData,
+  nagtibbaData,
+  keralaData,
 ];
 
 const UpcomingPage: React.FC = () => {
@@ -30,7 +37,8 @@ const UpcomingPage: React.FC = () => {
   const carouselRef = useRef<CarouselRef>(null);
   const trekContentRef = useRef<HTMLDivElement>(null);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
-  
+  const [upiModalOpen, setUpiModalOpen] = useState(false);
+
   // Initialize selected trek from URL parameter or default to first trek
   const getInitialTrek = (): TrekData => {
     const trekId = searchParams.get('trek');
@@ -42,7 +50,10 @@ const UpcomingPage: React.FC = () => {
   };
   
   const [selectedTrek, setSelectedTrek] = useState<TrekData>(getInitialTrek());
-  
+
+  // Treks that use UPI payment (no PayU link)
+  const useUpiPayment = selectedTrek.id === 'nagtibba' || selectedTrek.id === 'kerala';
+
   // Update selected trek when URL parameter changes
   useEffect(() => {
     const trekId = searchParams.get('trek');
@@ -74,20 +85,22 @@ const UpcomingPage: React.FC = () => {
   );
 
   const handleBookNow = () => {
-    // Scroll to booking section or open registration link
+    if (useUpiPayment) {
+      setUpiModalOpen(true);
+      return;
+    }
     if (selectedTrek.registrationLink) {
-      // Treks with registration link - open it
       window.open(selectedTrek.registrationLink, '_blank');
     } else {
-      // Scroll to booking section
-      paymentMessageRef.current?.scrollIntoView({ 
+      paymentMessageRef.current?.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'start',
       });
     }
   };
 
   const handleDownloadBrochure = () => {
+    if (!selectedTrek.brochure) return;
     const link = document.createElement('a');
     link.href = selectedTrek.brochure;
     link.download = `${selectedTrek.title}.pdf`;
@@ -125,6 +138,10 @@ const UpcomingPage: React.FC = () => {
         return brahmatalHero;
       case 'sandakphu':
         return sandakphuHero;
+      case 'nagtibba':
+        return nagtibbaHero;
+      case 'kerala':
+        return keralaHero;
       default:
         return grasslandMountain;
     }
@@ -244,14 +261,32 @@ const UpcomingPage: React.FC = () => {
                   <Title level={2} style={{ marginBottom: '8px' }}>
                     {selectedTrek.title}
                   </Title>
-                  <Space wrap>
+                  <Space wrap style={{ marginBottom: selectedTrek.allGirlsTrip ? 12 : 0 }}>
                     <Tag color="blue" icon={<CalendarOutlined />}>
                       {selectedTrek.date}
                     </Tag>
                     <Tag color="green" icon={<ClockCircleOutlined />}>
                       {selectedTrek.duration}
                     </Tag>
+                    {selectedTrek.allGirlsTrip && (
+                      <Tag color="pink" style={{ fontWeight: 600 }}>
+                        All Girls Trip
+                      </Tag>
+                    )}
                   </Space>
+                  {selectedTrek.allGirlsTrip && (
+                    <Alert
+                      message="All Girls Trip"
+                      description="Girls only getaway — good vibes guaranteed! ⛰️"
+                      type="info"
+                      style={{
+                        marginTop: 8,
+                        borderRadius: 8,
+                        border: '1px solid #f4a7c5',
+                        background: isDarkMode ? '#2a1620' : '#fff7fa', 
+                      }}
+                    />
+                  )}
                 </div>
 
                 <div>
@@ -279,24 +314,68 @@ const UpcomingPage: React.FC = () => {
                       {selectedTrek.pricing.totalCostWithTransport > 0 && (
                         <Col xs={24} sm={selectedTrek.pricing.totalCostWithoutTransport > 0 ? 12 : 24}>
                           <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                            <Text strong className="price-amount with-transport">₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
-                            <br />
-                            <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>
+                            {selectedTrek.pricing.originalPrice != null && (
+                              <>
+                                <Text delete style={{ fontSize: '14px', color: isDarkMode ? '#737373' : '#666', marginRight: 8 }}>
+                                  ₹{selectedTrek.pricing.originalPrice.toLocaleString('en-IN')}
+                                </Text>
+                                <Text strong className="price-amount with-transport" style={{ color: '#059669' }}>
+                                  ₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}
+                                </Text>
+                                <br />
+                                <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`} style={{ color: '#059669' }}>
+                                  Early bird discount
+                                </Text>
+                              </>
+                            )}
+                            {selectedTrek.pricing.originalPrice == null && (
+                              <>
+                                <Text strong className="price-amount with-transport">₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
+                                <br />
+                                <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>
+                              </>
+                            )}
                           </div>
                         </Col>
                       )}
                       {selectedTrek.pricing.totalCostWithoutTransport > 0 && (
                         <Col xs={24} sm={selectedTrek.pricing.totalCostWithTransport > 0 ? 12 : 24}>
                           <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                            <Text strong className="price-amount without-transport">₹{selectedTrek.pricing.totalCostWithoutTransport.toLocaleString('en-IN')}</Text>
-                            <br />
-                            <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                              {selectedTrek.pricing.totalCostWithTransport > 0 ? 'Without Transport' : 'Trek Package'}
-                            </Text>
+                            {selectedTrek.pricing.originalPrice != null && !selectedTrek.pricing.totalCostWithTransport && (
+                              <>
+                                <Text delete style={{ fontSize: '14px', color: isDarkMode ? '#737373' : '#666', marginRight: 8 }}>
+                                  ₹{selectedTrek.pricing.originalPrice.toLocaleString('en-IN')}
+                                </Text>
+                                <Text strong className="price-amount without-transport" style={{ color: '#059669' }}>
+                                  ₹{selectedTrek.pricing.totalCostWithoutTransport.toLocaleString('en-IN')}
+                                </Text>
+                                <br />
+                                <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`} style={{ color: '#059669' }}>
+                                  Early bird discount
+                                </Text>
+                              </>
+                            )}
+                            {(!selectedTrek.pricing.originalPrice || selectedTrek.pricing.totalCostWithTransport > 0) && (
+                              <>
+                                <Text strong className="price-amount without-transport">₹{selectedTrek.pricing.totalCostWithoutTransport.toLocaleString('en-IN')}</Text>
+                                <br />
+                                <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                                  {selectedTrek.pricing.totalCostWithTransport > 0 ? 'Without Transport' : 'Trek Package'}
+                                </Text>
+                              </>
+                            )}
                           </div>
                         </Col>
                       )}
                     </Row>
+                    {selectedTrek.pricing.earlyBirdSeatsLeft != null && selectedTrek.pricing.earlyBirdSeatsLeft > 0 && (
+                      <Alert
+                        message={`Only ${selectedTrek.pricing.earlyBirdSeatsLeft} seat${selectedTrek.pricing.earlyBirdSeatsLeft === 1 ? '' : 's'} left for this discount`}
+                        type="warning"
+                        showIcon
+                        style={{ marginTop: 12, borderRadius: 8 }}
+                      />
+                    )}
                   </div>
                 )}
 
@@ -315,6 +394,25 @@ const UpcomingPage: React.FC = () => {
                       borderRadius: '8px',
                       border: '1px solid #91d5ff',
                       background: isDarkMode ? '#111d2c' : '#e6f7ff'
+                    }}
+                  />
+                )}
+
+                {/* Special package note (e.g. Pilani to Pilani) */}
+                {selectedTrek.specialPackageNote && (
+                  <Alert
+                    message={`Special "${selectedTrek.specialPackageNote}" package`}
+                    description={
+                      <Text style={{ fontSize: '14px' }}>
+                        Call {selectedTrek.specialPackagePhone ? `at ${selectedTrek.specialPackagePhone}` : ''} for more information.
+                      </Text>
+                    }
+                    type="info"
+                    showIcon
+                    style={{
+                      borderRadius: '8px',
+                      border: '1px solid #d4a574',
+                      background: isDarkMode ? '#2d1f0a' : '#fff7e6',
                     }}
                   />
                 )}
@@ -346,7 +444,7 @@ const UpcomingPage: React.FC = () => {
                 />
 
                 <Row gutter={[12, 12]}>
-                  <Col xs={24} sm={12}>
+                  <Col xs={24} sm={selectedTrek.brochure ? 12 : 24}>
                     <Button 
                       type="primary" 
                       size="large" 
@@ -361,24 +459,26 @@ const UpcomingPage: React.FC = () => {
                       Book Now
                     </Button>
                   </Col>
-                  <Col xs={24} sm={12}>
-                    <Button 
-                      type="default" 
-                      size="large" 
-                      block
-                      icon={<DownloadOutlined />}
-                      onClick={handleDownloadBrochure}
-                      style={{ 
-                        height: '50px',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        borderColor: '#d4a574',
-                        color: '#d4a574'
-                      }}
-                    >
-                      Download Brochure
-                    </Button>
-                  </Col>
+                  {selectedTrek.brochure && (
+                    <Col xs={24} sm={12}>
+                      <Button 
+                        type="default" 
+                        size="large" 
+                        block
+                        icon={<DownloadOutlined />}
+                        onClick={handleDownloadBrochure}
+                        style={{ 
+                          height: '50px',
+                          fontSize: '16px',
+                          fontWeight: 'bold',
+                          borderColor: '#d4a574',
+                          color: '#d4a574'
+                        }}
+                      >
+                        Download Brochure
+                      </Button>
+                    </Col>
+                  )}
                 </Row>
               </Space>
             </Col>
@@ -691,11 +791,11 @@ const UpcomingPage: React.FC = () => {
                         type="primary" 
                         size="large"
                         onClick={() => {
-                          if (selectedTrek.registrationLink) {
-                            // Treks with registration link
+                          if (useUpiPayment) {
+                            setUpiModalOpen(true);
+                          } else if (selectedTrek.registrationLink) {
                             window.open(selectedTrek.registrationLink, '_blank');
                           }
-                          // If no registration link yet, do nothing
                         }}
                         className="booking-button"
                       >
@@ -738,6 +838,38 @@ const UpcomingPage: React.FC = () => {
           </Space>
         </Card>
       </div>
+
+      {/* UPI Payment Modal (Nagtibba & Kerala) */}
+      <Modal
+        title="Pay via UPI"
+        open={upiModalOpen}
+        onCancel={() => setUpiModalOpen(false)}
+        footer={null}
+        width={400}
+        centered
+      >
+        <Space direction="vertical" size="middle" style={{ width: '100%', alignItems: 'center' }}>
+          <img
+            src={upiImage}
+            alt="UPI QR code - Scan to pay"
+            style={{ maxWidth: '100%', height: 'auto', borderRadius: 8 }}
+          />
+          <Text style={{ fontSize: 14, color: isDarkMode ? '#a3a3a3' : '#666' }}>
+            Scan to pay with any UPI app
+          </Text>
+          <Alert
+            message="Can't pay by UPI?"
+            description={
+              <Text>
+                Call us at <Text strong copyable={{ text: '7983414419' }}>7983414419</Text> for alternate payment options.
+              </Text>
+            }
+            type="info"
+            showIcon
+            style={{ width: '100%', borderRadius: 8 }}
+          />
+        </Space>
+      </Modal>
 
       {/* Booking Modal */}
       <BookingModal 
