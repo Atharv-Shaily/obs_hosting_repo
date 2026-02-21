@@ -19,7 +19,6 @@ export const keralaData: TrekData = {
   description:
     'Explore the backwaters, hills and culture of Kerala with OBS. Early bird price ₹27,000 (original ₹30,000). Only 2 seats left at this discount. Pay ₹6,750 now and the rest later.',
   highlights: [
-    'All girls trip – women-only group',
     'Alpine Olympics',
     'Happiness Sharing',
     'Meet up and Intro in OBS style 😎',
@@ -86,7 +85,7 @@ export const keralaData: TrekData = {
     registrationFee: 6750,
     remainingAmountWithTransport: 20250,
     remainingAmountWithoutTransport: 0,
-    paymentDeadline: 'TBD',
+    paymentDeadline: '1 April 2026',
     originalPrice: 30000,
     earlyBirdSeatsLeft: 2,
   },
