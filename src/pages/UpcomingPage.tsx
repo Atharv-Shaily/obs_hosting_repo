@@ -15,10 +15,9 @@ import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
 import brahmatalHero from '../assets/treks/bhramtal/bhramtal.jpg';
-import sandakphuHero from '../assets/treks/sandakhpu/sandakhpu.jpg';
 // Placeholder heroes for Nagtibba and Kerala – replace when images are ready
-import nagtibbaHero from '../assets/treks/bhramtal/bhramtal.jpg';
-import keralaHero from '../assets/treks/bhramtal/bhramtal.jpg';
+import nagtibbaHero from '../assets/treks/nagtibba/nagtibba_hero .png';
+import keralaHero from '../assets/treks/kerala/kerala_cover.png';
 import upiImage from '../assets/upi.jpg';
 
 const { Title, Paragraph, Text } = Typography;
@@ -136,8 +135,6 @@ const UpcomingPage: React.FC = () => {
     switch (selectedTrek.id) {
       case 'brahmatal':
         return brahmatalHero;
-      case 'sandakphu':
-        return sandakphuHero;
       case 'nagtibba':
         return nagtibbaHero;
       case 'kerala':
@@ -647,17 +644,10 @@ const UpcomingPage: React.FC = () => {
                         <Text strong>₹{selectedTrek.pricing.transportationFee.toLocaleString('en-IN')}</Text>
                       </Row>
                     )}
-                    {/* Show GST for Sandakphu trek */}
-                    {selectedTrek.id === 'sandakphu' && selectedTrek.pricing.trekFee > 0 && (
-                      <Row justify="space-between">
-                        <Text>GST (5%):</Text>
-                        <Text strong>₹{(selectedTrek.pricing.trekFee * 0.05).toLocaleString('en-IN')}</Text>
-                      </Row>
-                    )}
                     <hr style={{ margin: '12px 0', border: '1px solid #e8e8e8' }} />
                     <Row justify="space-between">
                       <Text strong style={{ fontSize: '16px' }}>
-                        Total Cost{selectedTrek.id === 'sandakphu' ? ' (incl. GST)' : ''}:
+                        Total Cost:
                       </Text>
                       <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
                         ₹{(selectedTrek.pricing.totalCostWithTransport > 0 

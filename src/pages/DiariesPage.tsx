@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Row, Col, Typography, Card, Rate, Avatar, Tag, Space } from 'antd';
-import { UserOutlined, CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { UserOutlined, CalendarOutlined, EnvironmentOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 
-import { useDarkMode } from '../contexts/DarkModeContext';
 import '../styles/components/HeroSection.less';
 import '../styles/components/DiariesPage.less';
 import sceneryOtw from '../assets/treks/yulla/scenery-otw.jpg';
@@ -12,11 +11,113 @@ import dayaraGroup from '../assets/treks/dayara/dayara_group.jpg';
 import groupPreviousKuari from '../assets/treks/kuari/group-previous.png';
 import tejasviTestimonial from '../assets/testimonials/tejasvi.jpg';
 import pranathiTestimonial from '../assets/testimonials/pranathi.jpg';
+import rohitTyagi from '../assets/testimonials/rohit_tyagi.png';
+import ghouse from '../assets/testimonials/ghouse.png';
+import teamThaith from '../assets/testimonials/team_thaith.png';
 
 const { Title, Paragraph } = Typography;
 
+// Static — defined outside to avoid re-creation on every render
+const TESTIMONIALS = [
+  { src: tejasviTestimonial,  alt: "Tejasvi's testimonial" },
+  { src: pranathiTestimonial, alt: "Pranathi's testimonial" },
+  { src: rohitTyagi,          alt: "Rohit Tyagi's testimonial" },
+  { src: ghouse,              alt: "Ghouse's testimonial" },
+  { src: teamThaith,          alt: "Team Thaith's testimonial" },
+];
+
 const DiariesPage: React.FC = () => {
-  const { isDarkMode } = useDarkMode();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);
+  const animFrameRef = useRef<number>(0);
+  const isPausedRef = useRef(false);
+  const isTransitioningRef = useRef(false);
+
+  const CARD_WIDTH = 384; // 360px card + 24px gap
+  const SPEED = 0.5;
+
+  useEffect(() => {
+    const totalWidth = reviews.length * CARD_WIDTH;
+    const animate = () => {
+      if (!isPausedRef.current) {
+        offsetRef.current -= SPEED;
+        if (offsetRef.current <= -totalWidth) {
+          offsetRef.current = 0;
+        }
+        if (trackRef.current) {
+          trackRef.current.style.transform = `translateX(${offsetRef.current}px)`;
+        }
+      }
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+    animFrameRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animFrameRef.current);
+  }, []);
+
+  const scrollByCard = (direction: 'left' | 'right') => {
+    if (isTransitioningRef.current) return;
+    isTransitioningRef.current = true;
+    isPausedRef.current = true;
+
+    const totalWidth = reviews.length * CARD_WIDTH;
+    offsetRef.current += direction === 'left' ? CARD_WIDTH : -CARD_WIDTH;
+    if (offsetRef.current > 0) offsetRef.current -= totalWidth;
+    if (offsetRef.current <= -totalWidth) offsetRef.current = 0;
+
+    if (trackRef.current) {
+      trackRef.current.style.transition = 'transform 0.4s ease';
+      trackRef.current.style.transform = `translateX(${offsetRef.current}px)`;
+    }
+
+    setTimeout(() => {
+      if (trackRef.current) trackRef.current.style.transition = '';
+      isTransitioningRef.current = false;
+      isPausedRef.current = false;
+    }, 400);
+  };
+
+  // Stories That Speak Volumes — book page-flip carousel
+  const storyIndexRef = useRef(0);
+  const [storyIndex, setStoryIndex] = useState(0);
+  const [flipClass, setFlipClass]   = useState('');
+  const storyFlipping = useRef(false);
+  const storyPaused   = useRef(false);
+  const touchStartX   = useRef(0);
+
+  const doFlip = useCallback((newIndex: number, dir: 'next' | 'prev') => {
+    if (storyFlipping.current) return;
+    storyFlipping.current = true;
+    setFlipClass(`page-fold-out-${dir}`);
+    setTimeout(() => {
+      storyIndexRef.current = newIndex;
+      setStoryIndex(newIndex);
+      setFlipClass(`page-fold-in-${dir}`);
+      setTimeout(() => {
+        setFlipClass('');
+        storyFlipping.current = false;
+      }, 300);
+    }, 300);
+  }, []);
+
+  const navigateStory = useCallback((dir: 'next' | 'prev') => {
+    const newIndex = dir === 'next'
+      ? (storyIndexRef.current + 1) % TESTIMONIALS.length
+      : (storyIndexRef.current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length;
+    doFlip(newIndex, dir);
+  }, [doFlip]);
+
+  const goToStory = useCallback((index: number) => {
+    if (index === storyIndexRef.current) return;
+    doFlip(index, index > storyIndexRef.current ? 'next' : 'prev');
+  }, [doFlip]);
+
+  // Auto-advance every 4 s; pauses on hover
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!storyPaused.current) navigateStory('next');
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [navigateStory]);
 
   const experiences = [
     {
@@ -150,11 +251,7 @@ const DiariesPage: React.FC = () => {
   ];
 
   return (
-    <div style={{ 
-      background: isDarkMode ? '#0f0f0f' : '#f5f5f5', 
-      minHeight: '100vh',
-      transition: 'background-color 0.3s ease'
-    }}>
+    <div className="diaries-page">
       <div 
         className="hero-section" 
         style={{ backgroundImage: `url(${sceneryOtw})` }}
@@ -238,106 +335,101 @@ const DiariesPage: React.FC = () => {
 
       {/* Reviews Section */}
       <div className="reviews-section" style={{ 
-        background: isDarkMode ? '#1a1a1a' : 'white', 
         padding: '80px 24px',
         maxWidth: '1200px',
         margin: '0 auto',
-        transition: 'background-color 0.3s ease'
       }}>
         <Title level={2} style={{ textAlign: 'center', marginBottom: '48px' }}>
           What Our Adventurers Say
         </Title>
-        <Row gutter={[24, 24]}>
-          {reviews.map((review) => (
-            <Col xs={24} md={12} lg={8} key={review.id}>
-              <Card 
-                style={{ 
-                  height: '100%',
-                  borderRadius: '12px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-                }}
-              >
-                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <Avatar size={48} icon={<UserOutlined />} />
-                    <div>
-                      <Title level={5} style={{ margin: 0 }}>{review.name}</Title>
-                      <Paragraph style={{ margin: 0, color: '#666' }}>
-                        {review.location} • {review.date}
-                      </Paragraph>
+        <div className="reviews-scroll-outer">
+          <button
+            className="reviews-arrow reviews-arrow-left"
+            onClick={() => scrollByCard('left')}
+            aria-label="Previous reviews"
+          >
+            <LeftOutlined />
+          </button>
+
+          <div
+            className="reviews-scroll-wrapper"
+            onMouseEnter={() => { isPausedRef.current = true; }}
+            onMouseLeave={() => { if (!isTransitioningRef.current) isPausedRef.current = false; }}
+          >
+            <div className="reviews-scroll-track" ref={trackRef}>
+              {[...reviews, ...reviews].map((review, index) => (
+                <Card
+                  key={`review-${index}`}
+                  className="reviews-scroll-card"
+                >
+                  <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <Avatar size={48} icon={<UserOutlined />} />
+                      <div>
+                        <Title level={5} style={{ margin: 0 }}>{review.name}</Title>
+                        <Paragraph className="review-meta">
+                          {review.location} • {review.date}
+                        </Paragraph>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div>
-                    <Rate disabled defaultValue={review.rating} style={{ fontSize: '14px' }} />
-                    <Tag color="blue" style={{ marginLeft: '8px' }}>
-                      {review.experience}
-                    </Tag>
-                  </div>
-                  
-                  <Paragraph style={{ margin: 0, fontStyle: 'italic' }}>
-                    "{review.review}"
-                  </Paragraph>
-                </Space>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+                    <div>
+                      <Rate disabled defaultValue={review.rating} style={{ fontSize: '14px' }} />
+                      <Tag color="blue" style={{ marginLeft: '8px' }}>
+                        {review.experience}
+                      </Tag>
+                    </div>
+                    <Paragraph style={{ margin: 0, fontStyle: 'italic' }}>
+                      "{review.review}"
+                    </Paragraph>
+                  </Space>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          <button
+            className="reviews-arrow reviews-arrow-right"
+            onClick={() => scrollByCard('right')}
+            aria-label="Next reviews"
+          >
+            <RightOutlined />
+          </button>
+        </div>
         
         {/* Featured Testimonials - Social Media Posts */}
         <div style={{ marginTop: '60px' }}>
-          <Title level={3} style={{ textAlign: 'center', marginBottom: '40px', color: isDarkMode ? '#fff' : '#000' }}>
+          <Title level={3} className="stories-title" style={{ textAlign: 'center', marginBottom: '40px' }}>
             Stories That Speak Volumes
           </Title>
-          <Row gutter={[32, 32]} justify="center">
-            <Col xs={24} md={12} lg={10}>
-              <Card
-                style={{
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                  border: 'none',
-                  background: isDarkMode ? '#2a2a2a' : '#fff'
-                }}
-                bodyStyle={{ padding: 0 }}
-              >
-                <img
-                  src={tejasviTestimonial}
-                  alt="Tejasvi's testimonial from @sahtejasvi"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    borderRadius: '16px'
-                  }}
-                />
-              </Card>
-            </Col>
-            
-            <Col xs={24} md={12} lg={10}>
-              <Card
-                style={{
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                  border: 'none',
-                  background: isDarkMode ? '#2a2a2a' : '#fff'
-                }}
-                bodyStyle={{ padding: 0 }}
-              >
-                <img
-                  src={pranathiTestimonial}
-                  alt="Pranathi's testimonial from @pranathi_punjaala"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    display: 'block',
-                    borderRadius: '16px'
-                  }}
-                />
-              </Card>
-            </Col>
-          </Row>
+
+          <div className="stories-viewport"
+            onMouseEnter={() => { storyPaused.current = true; }}
+            onMouseLeave={() => { storyPaused.current = false; }}
+            onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+            onTouchEnd={(e) => {
+              const delta = touchStartX.current - e.changedTouches[0].clientX;
+              if (Math.abs(delta) > 50) navigateStory(delta > 0 ? 'next' : 'prev');
+            }}
+          >
+            <div className={`stories-page-inner ${flipClass}`}>
+              <img
+                src={TESTIMONIALS[storyIndex].src}
+                alt={TESTIMONIALS[storyIndex].alt}
+                className="stories-img"
+              />
+            </div>
+          </div>
+
+          <div className="stories-dots">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                className={`stories-dot${i === storyIndex ? ' active' : ''}`}
+                onClick={() => goToStory(i)}
+                aria-label={`Go to story ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

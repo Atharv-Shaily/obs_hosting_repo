@@ -4,53 +4,322 @@
 @primary-color: #d4a574;
 @dark-bg: #0f0f0f;
 @light-bg: #f5f5f5;
+@dark-section-bg: #1a1a1a;
+@light-section-bg: #ffffff;
+@dark-card-bg: #262626;
+@light-card-bg: #ffffff;
+@dark-testimonial-bg: #2a2a2a;
+@dark-meta-color: #a3a3a3;
+@light-meta-color: #666666;
+
+// Page root
+.diaries-page {
+  background: @light-bg;
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+html.dark .diaries-page {
+  background: @dark-bg;
+}
 
 // Experiences Section
 .experiences-section {
-  // Mobile responsive adjustments
   @media (max-width: 768px) {
-    padding: 60px 16px !important;
+    padding: 60px 16px;
   }
-  
+
   @media (max-width: 480px) {
-    padding: 40px 12px !important;
+    padding: 40px 12px;
   }
 }
 
 // Reviews Section
 .reviews-section {
-  // Mobile responsive adjustments
+  background: @light-section-bg;
+  transition: background-color 0.3s ease;
+
   @media (max-width: 768px) {
-    padding: 60px 16px !important;
+    padding: 60px 16px;
   }
-  
+
   @media (max-width: 480px) {
-    padding: 40px 12px !important;
+    padding: 40px 12px;
   }
+}
+
+html.dark .reviews-section {
+  background: @dark-section-bg;
+}
+
+// Review card meta (location · date)
+.review-meta {
+  margin: 0;
+  color: @light-meta-color;
+}
+
+html.dark .review-meta {
+  color: @dark-meta-color;
+}
+
+// Horizontal scrollable reviews — JS rAF driven
+.reviews-scroll-outer {
+  position: relative;
+}
+
+.reviews-scroll-wrapper {
+  overflow: hidden;
+  margin: 0 -24px;
+}
+
+.reviews-scroll-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  padding: 8px 24px;
+  will-change: transform;
+}
+
+.reviews-scroll-card {
+  flex-shrink: 0;
+  width: 360px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    width: 320px;
+  }
+
+  @media (max-width: 480px) {
+    width: 280px;
+  }
+}
+
+html.dark .reviews-scroll-card {
+  background: @dark-card-bg;
+  border-color: #404040;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  .ant-card-body {
+    background: @dark-card-bg;
+  }
+}
+
+// Arrow buttons
+.reviews-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: transparent;
+  backdrop-filter: blur(1px);
+  color: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 1);
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+html.dark .reviews-arrow {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.75);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.28);
+  }
+}
+
+.reviews-arrow-left {
+  left: 0;
+}
+
+.reviews-arrow-right {
+  right: 0;
+}
+
+// Stories That Speak Volumes title
+.stories-title {
+  color: #000000;
+}
+
+html.dark .stories-title {
+  color: #ffffff;
+}
+
+// Testimonial image cards
+.testimonial-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: none;
+  background: @light-card-bg;
+}
+
+html.dark .testimonial-card {
+  background: @dark-testimonial-bg;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 // Kuari Pass Coming Soon Section
 .kuari-coming-soon {
-  // Mobile responsive adjustments
   @media (max-width: 768px) {
-    padding: 32px 16px !important;
+    padding: 32px 16px;
   }
-  
+
   @media (max-width: 480px) {
-    padding: 24px 12px !important;
+    padding: 24px 12px;
   }
 }
 
 // Experience Tags - Responsive behavior
 .experience-tags {
-  // Mobile responsive adjustments
   @media (max-width: 768px) {
-    flex-wrap: wrap !important;
-    justify-content: flex-start !important;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
-  
+
   @media (max-width: 480px) {
-    flex-wrap: wrap !important;
-    justify-content: flex-start !important;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+// ─── Stories That Speak Volumes ──────────────────────────────────────────────
+
+// The perspective container — gives depth to the 3D flip
+.stories-viewport {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 560px;
+  height: 480px;
+  margin: 0 auto;
+  touch-action: pan-y; // allow vertical scroll; horizontal swipe handled by JS
+
+  @media (max-width: 768px) {
+    height: 380px;
+  }
+
+  @media (max-width: 480px) {
+    height: 300px;
+  }
+}
+
+// The flipping surface
+.stories-page-inner {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+
+  img.stories-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+  }
+}
+
+// Book fold animations — transform-origin makes the page appear to fold from its edge
+.page-fold-out-next {
+  animation: page-fold-out-next 0.3s ease-in forwards;
+  transform-origin: right center;
+}
+
+.page-fold-in-next {
+  animation: page-fold-in-next 0.3s ease-out forwards;
+  transform-origin: left center;
+}
+
+.page-fold-out-prev {
+  animation: page-fold-out-prev 0.3s ease-in forwards;
+  transform-origin: left center;
+}
+
+.page-fold-in-prev {
+  animation: page-fold-in-prev 0.3s ease-out forwards;
+  transform-origin: right center;
+}
+
+@keyframes page-fold-out-next {
+  from { transform: rotateY(0deg);   opacity: 1; }
+  to   { transform: rotateY(-90deg); opacity: 0; }
+}
+
+@keyframes page-fold-in-next {
+  from { transform: rotateY(90deg); opacity: 0; }
+  to   { transform: rotateY(0deg);  opacity: 1; }
+}
+
+@keyframes page-fold-out-prev {
+  from { transform: rotateY(0deg);  opacity: 1; }
+  to   { transform: rotateY(90deg); opacity: 0; }
+}
+
+@keyframes page-fold-in-prev {
+  from { transform: rotateY(-90deg); opacity: 0; }
+  to   { transform: rotateY(0deg);   opacity: 1; }
+}
+
+// Position-indicator dots (now <button> elements for accessibility + dot click nav)
+.stories-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.stories-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: #ccc;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &.active {
+    background: @primary-color;
+    transform: scale(1.4);
+  }
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid @primary-color;
+    outline-offset: 2px;
+  }
+}
+
+html.dark .stories-dot {
+  background: #555;
+
+  &.active {
+    background: @primary-color;
   }
 }

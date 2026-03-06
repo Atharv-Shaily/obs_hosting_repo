@@ -10,6 +10,14 @@ import '../styles/components/HomePage.less';
 import yullaPanorama1 from '../assets/cover-gen-min.png';
 // Import data from utility file
 import { featuredTreks, carouselImages } from '../utils/HomePageData';
+// Google review screenshots
+import tejasviReview  from '../assets/testimonials/tejasvi.png';
+import krishiReview   from '../assets/testimonials/krishi.png';
+import sonaliReview   from '../assets/testimonials/Sonali.png';
+import swatiReview    from '../assets/testimonials/swati.png';
+import rohitReview    from '../assets/testimonials/rohit_tyagi.png';
+import ghouseReview   from '../assets/testimonials/ghouse.png';
+import teamThaithReview from '../assets/testimonials/team_thaith.png';
 
 const { Title, Paragraph } = Typography;
 
@@ -39,12 +47,17 @@ const HomePage: React.FC = () => {
       title: '🔭 Astro Nite',
       description: 'A magical session where we observe the Moon, planets, and the night sky through a telescope.',
       icon: <EnvironmentOutlined className={`activity-icon ${isDarkMode ? 'dark-mode' : ''}`} />
-    },
-    {
-      title: '🏵 Mandala Workshop',
-      description: 'Creative expression through traditional mandala art, connecting with ancient wisdom and inner peace.',
-      icon: <TeamOutlined className={`activity-icon ${isDarkMode ? 'dark-mode' : ''}`} />
     }
+  ];
+
+  const tribeReviews = [
+    { src: tejasviReview,    alt: "Tejasvi Sah's review" },
+    { src: rohitReview,      alt: "Rohit Tyagi's review" },
+    { src: krishiReview,     alt: "Krishi Gupta's review" },
+    { src: ghouseReview,     alt: "Ghouse Peer's review" },
+    { src: sonaliReview,     alt: "Dr. Sonali Gupta's review" },
+    { src: teamThaithReview, alt: "Team Thaith Pahadi's review" },
+    { src: swatiReview,      alt: "Swati Gaur's review" },
   ];
 
   return (
@@ -385,6 +398,25 @@ const HomePage: React.FC = () => {
             </Card>
           </Col>
         </Row>
+      </div>
+
+      {/* Tribe Reviews — right-to-left scrolling strip */}
+      <div className={`content-section home-reviews-section ${isDarkMode ? 'dark' : 'light'}`}>
+        <Title level={2} className="section-title">
+        What Our OBS Tribe Members Say
+        </Title>
+        <div className="home-reviews-scroll-wrapper">
+          <div className="home-reviews-scroll-track">
+            {[...tribeReviews, ...tribeReviews].map((review, i) => (
+              <img
+                key={i}
+                src={review.src}
+                alt={review.alt}
+                className="home-review-img"
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

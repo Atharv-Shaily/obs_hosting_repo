@@ -51,7 +51,7 @@ export const nagtibbaData: TrekData = {
   ],
   inclusions: [
     'Stay for 2 nights',
-    'All meals during the trek',
+    'All meals during the trek (Day 1 Dinner → Day 3 Breakfast)',
     'Transportation (Dehradun to Dehradun)',
     'Trek guide and support',
     'Permits and fees',

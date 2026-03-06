@@ -96,7 +96,7 @@ const AboutPage: React.FC = () => {
     {
       year: '2025',
       title: 'Signature Experiences',
-      description: 'Introduced our unique signature activities: Happiness Sharing, Meditation & Journaling, Alpine Olympics, Astro Nite, and Mandala Workshop.'
+      description: 'Introduced our unique signature activities: Happiness Sharing, Meditation & Journaling, Alpine Olympics, and Astro Nite'
     },
     {
       year: 'Future',
