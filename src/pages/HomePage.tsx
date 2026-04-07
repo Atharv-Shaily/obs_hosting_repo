@@ -10,8 +10,6 @@ import '../styles/components/HomePage.less';
 import yullaPanorama1 from '../assets/cover-gen-min.png';
 // Import data from utility file
 import { featuredTreks, carouselImages } from '../utils/HomePageData';
-import { nagtibbaData } from '../assets/treks/nagtibba/NagtibbaData';
-import { getActiveOffer } from '../utils/specialOffer';
 // Google review screenshots
 import tejasviReview  from '../assets/testimonials/tejasvi.png';
 import krishiReview   from '../assets/testimonials/krishi.png';
@@ -27,7 +25,6 @@ const HomePage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const carouselRef = useRef<CarouselRef>(null);
   const navigate = useNavigate();
-  const nagtibbaOffer = getActiveOffer(nagtibbaData);
   
 
   const signatureActivities = [
@@ -222,20 +219,11 @@ const HomePage: React.FC = () => {
                     
                     <div className="featured-trek-footer">
                       <div className="featured-trek-price">
-                        {(() => {
-                          const offer = trek.id === 'nagtibba' ? nagtibbaOffer : null;
-                          const origPrice = (trek as { originalPrice?: string }).originalPrice;
-                          const showStrike = offer ? `₹${offer.originalPrice.toLocaleString('en-IN')}` : origPrice;
-                          const displayPrice = offer ? `₹${offer.offerPrice.toLocaleString('en-IN')}` : trek.price;
-                          const note = offer ? offer.label : trek.priceNote;
-                          return (
-                            <>
-                              {showStrike && <span className="price-original">{showStrike}</span>}
-                              <span className="price">{displayPrice}</span>
-                              {note && <span className="price-note">{note}</span>}
-                            </>
-                          );
-                        })()}
+                        {(trek as { originalPrice?: string }).originalPrice && (
+                          <span className="price-original">{(trek as { originalPrice?: string }).originalPrice}</span>
+                        )}
+                        <span className="price">{trek.price}</span>
+                        {trek.priceNote && <span className="price-note">{trek.priceNote}</span>}
                       </div>
                       <Button 
                         type="primary" 

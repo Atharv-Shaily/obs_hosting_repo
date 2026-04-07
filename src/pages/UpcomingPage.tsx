@@ -5,9 +5,7 @@ import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutli
 import { useSearchParams } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
-import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
-import { nagtibbaData } from '../assets/treks/nagtibba/NagtibbaData';
-import { keralaData } from '../assets/treks/kerala/KeralaData';
+import { kuariJuneData } from '../assets/treks/KuariJune/KuariJuneData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import { getActiveOffer } from '../utils/specialOffer';
@@ -15,19 +13,13 @@ import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
-import brahmatalHero from '../assets/treks/bhramtal/bhramtal.jpg';
-// Placeholder heroes for Nagtibba and Kerala – replace when images are ready
-import nagtibbaHero from '../assets/treks/nagtibba/nagtibba_hero .png';
-import keralaHero from '../assets/treks/kerala/kerala_cover.png';
+import kuariJuneHero from '../assets/treks/KuariJune/KuariJuneHero.png';
 import upiImage from '../assets/upi.jpg';
 
 const { Title, Paragraph, Text } = Typography;
 
-// All available treks (order: Brahmatal, Nagtibba, Kerala)
 const allTreks: TrekData[] = [
-  brahmatalData,
-  nagtibbaData,
-  keralaData,
+  kuariJuneData,
 ];
 
 const UpcomingPage: React.FC = () => {
@@ -53,8 +45,8 @@ const UpcomingPage: React.FC = () => {
 
   const activeOffer = getActiveOffer(selectedTrek);
 
-  // Treks that use UPI payment (no PayU link)
-  const useUpiPayment = selectedTrek.id === 'nagtibba' || selectedTrek.id === 'kerala';
+  // Treks that use UPI payment (no PayU link) — extend as needed for future treks
+  const useUpiPayment = selectedTrek.id === 'kuari-june';
 
   // Update selected trek when URL parameter changes
   useEffect(() => {
@@ -133,18 +125,9 @@ const UpcomingPage: React.FC = () => {
     }
   };
 
-  // Get hero image based on selected trek
   const getHeroImage = () => {
-    switch (selectedTrek.id) {
-      case 'brahmatal':
-        return brahmatalHero;
-      case 'nagtibba':
-        return nagtibbaHero;
-      case 'kerala':
-        return keralaHero;
-      default:
-        return grasslandMountain;
-    }
+    if (selectedTrek.id === 'kuari-june') return kuariJuneHero;
+    return grasslandMountain;
   };
 
   // Create tabs items for Ant Design Tabs
