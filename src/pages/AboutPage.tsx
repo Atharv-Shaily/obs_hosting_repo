@@ -7,7 +7,6 @@ import '../styles/components/UpcomingPage.less';
 import '../styles/components/ContactSection.less';
 import obsBackImage from '../assets/yatharth/obs-cover.jpg';
 import yatharthImage from '../assets/yatharth/yath-portrait.png';
-import ambujImage from '../assets/yatharth/ambuj.jpeg';
 import obsPointing from '../assets/yatharth/obs-pointing.jpg';
 import bikeImage from '../assets/yatharth/bike.jpg';
 import skyDivingImage from '../assets/yatharth/yath-sky-diving.png';
