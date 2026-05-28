@@ -18,7 +18,7 @@ export const YullaJulyData: TrekData = {
     trekPath,
     YullaScenery,
   ],
-  registrationLink: 'https://u.payu.in/PAYUMN/oI6bxKLQOiY7',
+  registrationLink: 'https://u.payu.in/PAYUMN/JIFR6dxFKoCX',
   brochure: YullaJulyBrochure,
   description:
 'Join the unforgettable trek with from 1–4 July 2026. More than just a trek, this journey blends adventure, self-reflection, and meaningful human connection amidst the serene Himalayas. Explore the sacred trail leading to the world’s highest Krishna temple, experience peaceful alpine landscapes, meditation, journaling, fun group activities, and create memories that last a lifetime. Perfect for adventure seekers looking for both thrill and personal growth in the heart of Himachal Pradesh.',
