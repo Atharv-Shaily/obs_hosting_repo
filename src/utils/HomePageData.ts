@@ -43,6 +43,22 @@ export const featuredTreks = [
       'Alpine meadows on the legendary Curzon Trail',
     ],
     color: '#0891b2',
+  },
+  {
+    id: 'ValleyofFlowers-July',
+    title: 'Valley of Flowers Trek',
+    subtitle: 'Summer Himalayan Adventure',
+    date: 'July 14-19, 2026',
+    duration: '6 Days / 5 Nights',
+    location: 'Garhwal Hills, Uttarakhand',
+    price: '₹13,750',
+    priceNote: 'with transport, incl. GST',
+    highlights: [
+          'Trek through the Valley of Flowers, a UNESCO World Heritage Site',
+    'Visit Hemkund Sahib, the world\'s highest Gurudwara at 14,100 ft',
+    'Visit the sacred Badrinath Temple, one of the holiest pilgrimage sites',
+    ],
+    color: '#0891b2',
   }
 ];
 

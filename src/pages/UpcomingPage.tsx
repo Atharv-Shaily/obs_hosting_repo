@@ -7,6 +7,7 @@ import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
 import { kuariJuneData } from '../assets/treks/KuariJune/KuariJuneData';
 import { YullaJulyData } from '../assets/treks/yullaKandaJuly/yullaKandaData';
+import { valleyOfFlowersJulyData } from '../assets/treks/ValleyofFlowersJuly/ValleyofFlowersJulyData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import { getActiveOffer } from '../utils/specialOffer';
@@ -22,7 +23,8 @@ const { Title, Paragraph, Text } = Typography;
 
 const allTreks: TrekData[] = [
   YullaJulyData,
-  kuariJuneData
+  kuariJuneData,
+  valleyOfFlowersJulyData
 ];
 
 const UpcomingPage: React.FC = () => {
