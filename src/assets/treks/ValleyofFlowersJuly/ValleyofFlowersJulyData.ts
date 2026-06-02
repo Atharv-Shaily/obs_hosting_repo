@@ -2,7 +2,6 @@ import type { TrekData } from '../TrekData';
 import ValleyofFlowerBrochure from "./Valley of Flowers Trek Brochure (July Batch) (1)_compressed.pdf"
 import VOFImage1 from "./ValleyofFlowers-Image.png"
 import VOFImage2 from "./ValleyofFlowers-Image-2.png"
-import VOFImage3 from "./ValleyofFlowers-Image-3.png"
 export const valleyOfFlowersJulyData: TrekData = {
   id: 'ValleyofFlowers-July',
   title: 'Valley of Flowers Trek',

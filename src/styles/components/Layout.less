@@ -227,3 +227,28 @@
     border-top: 1px solid @dark-border;
   }
 }
+
+// Auth action buttons in navbar
+.nav-auth-btn {
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &.dark {
+    color: #e5e5e5;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+.rank-tag {
+  border-radius: 20px;
+  font-size: 12px;
+  padding: 2px 10px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+}

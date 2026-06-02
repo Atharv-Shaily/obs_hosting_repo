@@ -2,8 +2,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, Tabs, Modal } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
 import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
+import { useAuth } from '../contexts/AuthContext';
 import BookingModal from '../components/BookingModal';
 import { kuariJuneData } from '../assets/treks/KuariJune/KuariJuneData';
 import { YullaJulyData } from '../assets/treks/yullaKandaJuly/yullaKandaData';
@@ -29,7 +30,10 @@ const allTreks: TrekData[] = [
 
 const UpcomingPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
+  const { isAuthenticated } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const paymentMessageRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<CarouselRef>(null);
   const trekContentRef = useRef<HTMLDivElement>(null);
@@ -94,6 +98,11 @@ const UpcomingPage: React.FC = () => {
   );
 
   const handleBookNow = () => {
+    // Redirect unauthenticated users to /auth, preserving the current trek URL
+    if (!isAuthenticated) {
+      navigate('/auth', { state: { returnTo: `${location.pathname}${location.search}` } });
+      return;
+    }
     if (useUpiPayment) {
       setUpiModalOpen(true);
       return;
@@ -894,6 +903,10 @@ const UpcomingPage: React.FC = () => {
                         type="primary" 
                         size="large"
                         onClick={() => {
+                          if (!isAuthenticated) {
+                            navigate('/auth', { state: { returnTo: `${location.pathname}${location.search}` } });
+                            return;
+                          }
                           if (useUpiPayment) {
                             setUpiModalOpen(true);
                           } else if (selectedTrek.registrationLink) {

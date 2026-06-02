@@ -2,11 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
 import { DarkModeProvider, useDarkMode } from './contexts/DarkModeContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import DiariesPage from './pages/DiariesPage';
 import UpcomingPage from './pages/UpcomingPage';
 import AboutPage from './pages/AboutPage';
+import AuthPage from './pages/AuthPage';
+import ProfilePage from './pages/ProfilePage';
 import './App.css';
 
 const AppContent: React.FC = () => {
@@ -36,6 +40,15 @@ const AppContent: React.FC = () => {
             <Route path="/upcoming" element={<UpcomingPage />} />
             <Route path="/diaries" element={<DiariesPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Layout>
       </Router>
@@ -46,7 +59,9 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <DarkModeProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </DarkModeProvider>
   );
 };

@@ -1,0 +1,219 @@
+@import '../globals/index.less';
+
+// ── Page shell ───────────────────────────────────────────────────────────────
+.profile-page {
+  min-height: calc(100vh - 64px);
+  background: #f5f0e8;
+  transition: background 0.3s ease;
+  padding-bottom: 60px;
+
+  &.dark-mode {
+    background: #0f0f0f;
+  }
+}
+
+.profile-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// ── Rank hero banner ─────────────────────────────────────────────────────────
+.profile-rank-hero {
+  position: relative;
+  text-align: center;
+  padding: 64px 24px 56px;
+  overflow: hidden;
+  border-radius: 0 0 32px 32px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--rank-color) 20%, #0f0f0f) 0%,
+    color-mix(in srgb, var(--rank-color) 8%, #1a1a1a) 100%
+  );
+  margin-bottom: 28px;
+
+  // Fallback for browsers without color-mix
+  background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
+}
+
+.profile-rank-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 80% at 50% -10%,
+    var(--rank-color, #d4a574) 0%,
+    transparent 70%
+  );
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.profile-rank-content {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-rank-emoji {
+  font-size: 72px;
+  line-height: 1;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.profile-rank-title {
+  color: #ffffff !important;
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  margin-bottom: 8px !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 480px) {
+    font-size: 26px !important;
+  }
+}
+
+.profile-rank-email {
+  color: rgba(255, 255, 255, 0.65) !important;
+  font-size: 15px;
+  margin-bottom: 0 !important;
+}
+
+// ── Stat cards ───────────────────────────────────────────────────────────────
+.profile-stats-row {
+  margin-bottom: 20px !important;
+}
+
+.profile-stat-card {
+  border-radius: 16px !important;
+  border: 1px solid rgba(212, 165, 116, 0.15) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  &.dark-mode {
+    background: #1a1a1a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .ant-statistic-title {
+      color: #888 !important;
+    }
+  }
+
+  .ant-statistic-title {
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+// ── Progress card ────────────────────────────────────────────────────────────
+.profile-progress-card {
+  border-radius: 16px !important;
+  border: 1px solid rgba(212, 165, 116, 0.15) !important;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+
+  &.dark-mode {
+    background: #1a1a1a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+.profile-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-progress-label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.profile-progress-pct {
+  font-weight: 700;
+  font-size: 14px;
+  color: #888;
+}
+
+.profile-progress-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+// ── History card ─────────────────────────────────────────────────────────────
+.profile-history-card {
+  border-radius: 16px !important;
+  border: 1px solid rgba(212, 165, 116, 0.15) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+
+  &.dark-mode {
+    background: #1a1a1a !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .ant-table {
+      background: #1a1a1a;
+    }
+
+    .ant-table-thead > tr > th {
+      background: #262626;
+      color: #e5e5e5;
+      border-color: #333;
+    }
+
+    .ant-table-tbody > tr > td {
+      border-color: #262626;
+      color: #d1d5db;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+      background: #222 !important;
+    }
+  }
+}
+
+.profile-history-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.profile-loading {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.profile-empty {
+  text-align: center;
+  padding: 48px 20px;
+}
+
+.profile-empty-emoji {
+  font-size: 52px;
+  margin-bottom: 16px;
+}
+
+.profile-empty-text {
+  color: #888;
+  max-width: 400px;
+  margin: 0 auto !important;
+}
+
+.loyalty-table {
+  .ant-table-row {
+    transition: background 0.15s ease;
+  }
+}
