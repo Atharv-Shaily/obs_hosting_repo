@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider, theme } from 'antd';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { DarkModeProvider, useDarkMode } from './contexts/DarkModeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/Layout';
@@ -12,6 +13,8 @@ import AboutPage from './pages/AboutPage';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import './App.css';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
 
 const AppContent: React.FC = () => {
   const { isDarkMode } = useDarkMode();
@@ -58,11 +61,13 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <DarkModeProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </DarkModeProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <DarkModeProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </DarkModeProvider>
+    </GoogleOAuthProvider>
   );
 };
 

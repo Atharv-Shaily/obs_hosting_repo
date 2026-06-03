@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Form, Input, Button, Typography, Alert, Tabs } from 'antd';
+import { Form, Input, Button, Typography, Alert, Tabs, Divider } from 'antd';
 import { UserOutlined, LockOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons';
+import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../contexts/AuthContext';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import '../styles/components/AuthPage.less';
@@ -13,7 +14,7 @@ interface LocationState {
 }
 
 const AuthPage: React.FC = () => {
-  const { login, register } = useAuth();
+  const { login, register, googleLogin } = useAuth();
   const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
   const location = useLocation();
@@ -210,6 +211,44 @@ const AuthPage: React.FC = () => {
                 : 'Start your Himalayan journey and earn loyalty rewards.'}
             </Paragraph>
           </div>
+
+          {/* Google Sign In */}
+          <div className="google-signin-section">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                if (!credentialResponse.credential) return;
+                setError(null);
+                setLoading(true);
+                try {
+                  await googleLogin(credentialResponse.credential);
+                  navigate(returnTo, { replace: true });
+                } catch (err) {
+                  setError(err instanceof Error ? err.message : 'Google sign-in failed.');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              onError={() => {
+                setError('Google sign-in was cancelled or failed.');
+              }}
+              size="large"
+              width="380"
+              text="continue_with"
+              shape="pill"
+            />
+            {error && !activeTab && (
+              <Alert
+                message={error}
+                type="error"
+                showIcon
+                closable
+                onClose={() => setError(null)}
+                style={{ marginTop: 12 }}
+              />
+            )}
+          </div>
+
+          <Divider className="auth-divider">or continue with email</Divider>
 
           {/* Tabs */}
           <Tabs

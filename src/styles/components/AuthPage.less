@@ -111,3 +111,31 @@
     text-decoration: underline;
   }
 }
+
+// Google Sign-In section
+.google-signin-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.auth-divider {
+  font-size: 12px !important;
+  color: #aaa !important;
+  margin: 12px 0 0 0 !important;
+
+  &::before,
+  &::after {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+.dark-mode .auth-divider {
+  color: #666 !important;
+
+  &::before,
+  &::after {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+}
