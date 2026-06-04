@@ -1,11 +1,12 @@
 @import '../globals/index.less';
 
-// Variables
-@primary-color: #d4a574;
+// Variables — Highland Editorial Design System
+@primary-color: #1b3a2d;   // Forest Green
+@amber-color:   #9e4300;   // Campfire Amber
 @dark-bg: #0f0f0f;
-@light-bg: #f5f5f5;
+@light-bg: #faf9f7;        // Parchment
 @dark-text: #e5e5e5;
-@light-text: #666;
+@light-text: #414844;
 
 // Mixins
 .text-shadow() {
@@ -78,14 +79,23 @@
     }
 
     .hero-button {
-      background-color: @primary-color;
-      border-color: @primary-color;
+      background-color: @amber-color;
+      border-color: @amber-color;
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-weight: 600;
+      border-radius: var(--radius-lg);
       .button-shadow();
+
+      &:hover {
+        background-color: #7c3400 !important;
+        border-color: #7c3400 !important;
+      }
 
       &:focus,
       &:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 2px rgba(212, 165, 116, 0.6);
+        box-shadow: 0 0 0 2px rgba(158, 67, 0, 0.6);
       }
     }
   }
@@ -180,35 +190,37 @@
   align-items: center;
 
   &.light {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1b3a2d 0%, #042419 100%);
     color: white;
 
     .hero-content {
       .hero-title {
         color: white;
+        font-family: var(--font-headline);
         .text-shadow();
       }
 
       .hero-paragraph {
-        color: white;
+        color: rgba(255, 255, 255, 0.9);
         .text-shadow-small();
       }
     }
   }
 
   &.dark {
-    background: linear-gradient(135deg, #e5e5e5 0%, #d4d4d8 100%);
-    color: #000000;
+    background: linear-gradient(135deg, #141d3c 0%, #2a3253 100%);
+    color: #e5e5e5;
 
     .hero-content {
       .hero-title {
-        color: #000000;
-        text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
+        color: #e5e5e5;
+        font-family: var(--font-headline);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
       }
 
       .hero-paragraph {
-        color: #000000;
-        text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+        color: rgba(229, 229, 229, 0.9);
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
       }
     }
   }

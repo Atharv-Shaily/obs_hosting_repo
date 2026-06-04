@@ -1,6 +1,5 @@
-/* Custom styles for Oh-Bhaisahab Experiences */
+/* ─── Highland Editorial Design System — App.css ──────────────────────────── */
 
-/* Global reset to prevent any unwanted overlays */
 * {
   box-sizing: border-box;
 }
@@ -8,9 +7,10 @@
 body {
   margin: 0;
   padding: 0;
-  background: #f5f5f5;
+  background: #faf9f7; /* Parchment surface */
   overflow-x: hidden;
   transition: background-color 0.3s ease;
+  font-family: 'DM Sans', system-ui, sans-serif;
 }
 
 #root {
@@ -27,6 +27,8 @@ body {
   background: #0f0f0f;
 }
 
+/* ── Navigation ─────────────────────────────────────────────────────────────── */
+
 .ant-layout-header {
   position: sticky;
   top: 0;
@@ -37,21 +39,20 @@ body {
   border-bottom: none !important;
 }
 
-/* Use Ant Design's default selected item styling with our custom colors */
+/* Selected nav item: Forest Green underline */
 .ant-menu-item-selected {
-  border-bottom-color: #d4a574 !important;
+  border-bottom-color: #1b3a2d !important;
 }
 
 .dark .ant-menu-item-selected {
-  border-bottom-color: #d4a574 !important;
+  border-bottom-color: #accebc !important; /* inverse-primary for dark */
 }
 
-/* Selected navigation item background in dark mode */
+/* Dark mode: transparent menu selected bg */
 .dark .ant-menu-item-selected {
   background-color: rgb(26, 26, 26) !important;
 }
 
-/* Fix Ant Design dark theme - make menu items transparent to avoid showing over hero images */
 .dark .ant-menu-dark.ant-menu-horizontal > .ant-menu-item-selected,
 .dark .ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu-selected {
   background-color: transparent !important;
@@ -61,15 +62,17 @@ body {
   background-color: transparent !important;
 }
 
-/* Navigation hover colors */
+/* Navigation hover: Amber */
 .ant-menu-item:hover {
-  color: #d4a574 !important;
+  color: #9e4300 !important;
 }
 
 .dark .ant-menu-item:hover {
-  color: #d4a574 !important;
+  color: #fc8138 !important;
   background-color: rgba(26, 26, 26, 0.1) !important;
 }
+
+/* ── Cards ──────────────────────────────────────────────────────────────────── */
 
 .ant-card {
   transition: all 0.3s ease;
@@ -77,41 +80,48 @@ body {
 
 .ant-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+  box-shadow: 0 8px 24px rgba(27, 58, 45, 0.15) !important;
 }
 
+/* ── Primary Buttons — Forest Green ─────────────────────────────────────────── */
+
 .ant-btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: #1b3a2d;
+  border-color: #1b3a2d;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(27, 58, 45, 0.3);
   transition: all 0.3s ease;
 }
 
 .ant-btn-primary:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: #0f2b1f !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 16px rgba(27, 58, 45, 0.4);
 }
 
-/* Dark mode button styles */
+/* Dark mode primary button */
 .dark .ant-btn-primary {
-  background: linear-gradient(135deg, #e5e5e5 0%, #d4d4d8 100%);
-  box-shadow: 0 4px 12px rgba(229, 229, 229, 0.4);
-  color: #000000;
+  background: #1b3a2d;
+  box-shadow: 0 4px 12px rgba(27, 58, 45, 0.5);
+  color: #ffffff;
 }
 
 .dark .ant-btn-primary:hover {
-  background: linear-gradient(135deg, #d4d4d8 0%, #a1a1aa 100%);
-  box-shadow: 0 6px 16px rgba(229, 229, 229, 0.5);
+  background: #0f2b1f !important;
+  box-shadow: 0 6px 16px rgba(27, 58, 45, 0.6);
 }
+
+/* ── Carousel ───────────────────────────────────────────────────────────────── */
 
 .ant-carousel .slick-dots li button {
   background: rgba(255, 255, 255, 0.5);
 }
 
 .ant-carousel .slick-dots li.slick-active button {
-  background: #d4a574;
+  background: #fc8138; /* Amber */
 }
+
+/* ── Misc Ant Design ────────────────────────────────────────────────────────── */
 
 .ant-timeline-item-content {
   margin-left: 24px;
@@ -122,25 +132,34 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Custom gradient backgrounds */
+/* ── Gradient utility classes ────────────────────────────────────────────────── */
+
+/* Forest Green primary gradient */
 .gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #042419 0%, #1b3a2d 100%);
 }
 
+/* Amber secondary gradient */
 .gradient-bg-alt {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #9e4300 0%, #fc8138 100%);
 }
 
-/* Dark mode gradient backgrounds */
+/* Twilight Indigo tertiary gradient */
+.gradient-bg-tertiary {
+  background: linear-gradient(135deg, #141d3c 0%, #2a3253 100%);
+}
+
+/* Dark mode overrides */
 .dark .gradient-bg {
-  background: linear-gradient(135deg, #e5e5e5 0%, #d4d4d8 100%);
+  background: linear-gradient(135deg, #1b3a2d 0%, #2e4d3f 100%);
 }
 
 .dark .gradient-bg-alt {
-  background: linear-gradient(135deg, #d4d4d8 0%, #a1a1aa 100%);
+  background: linear-gradient(135deg, #7c3400 0%, #9e4300 100%);
 }
 
-/* Custom animations */
+/* ── Animations ─────────────────────────────────────────────────────────────── */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -156,99 +175,91 @@ body {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Responsive adjustments */
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .ant-layout-header {
     padding: 0 16px;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  
-  /* Mobile header layout */
+
   .ant-layout-header > div:first-child {
     margin-right: 16px !important;
   }
-  
+
   .ant-layout-header .ant-menu {
     order: 3;
     width: 100%;
     margin-top: 8px;
   }
-  
+
   .ant-layout-header .ant-space {
     order: 2;
     margin-left: auto;
   }
-  
+
   .ant-typography h1 {
     font-size: 24px !important;
   }
-  
+
   .ant-typography h2 {
     font-size: 20px !important;
   }
-  
+
   .ant-typography h3 {
     font-size: 18px !important;
   }
-  
-  /* Mobile navigation adjustments */
+
   .ant-menu-horizontal {
     flex-wrap: wrap;
   }
-  
+
   .ant-menu-item {
     padding: 0 8px !important;
     font-size: 14px;
   }
-  
-  /* Mobile menu dropdown button positioning */
+
   .ant-menu-horizontal .ant-menu-submenu-title {
     padding: 0 8px !important;
   }
-  
-  /* Ensure dark mode toggle doesn't overlap */
+
   .ant-layout-header .ant-space {
     position: relative;
     z-index: 10;
   }
-  
-  /* Mobile hero sections */
+
   .hero-section {
     padding: 40px 16px !important;
   }
-  
+
   .hero-section h1 {
     font-size: 28px !important;
     margin-bottom: 12px !important;
   }
-  
+
   .hero-section p {
     font-size: 16px !important;
     margin-bottom: 24px !important;
   }
-  
-  /* Mobile content sections */
+
   .content-section {
     padding: 40px 16px !important;
   }
-  
-  /* Mobile cards */
+
   .ant-card {
     margin-bottom: 16px;
   }
-  
-  /* Mobile buttons */
+
   .ant-btn-lg {
     padding: 8px 16px;
     font-size: 14px;
   }
-  
-  /* Mobile QR code */
+
   .qr-code-container {
     padding: 16px !important;
   }
-  
+
   .qr-code-container .ant-qrcode {
     width: 150px !important;
     height: 150px !important;
@@ -260,82 +271,81 @@ body {
     padding: 0 12px;
     justify-content: space-between;
   }
-  
-  /* Extra small mobile header adjustments */
+
   .ant-layout-header > div:first-child {
     margin-right: 8px !important;
   }
-  
+
   .ant-layout-header .ant-space {
     margin-left: auto;
   }
-  
+
   .ant-typography h1 {
     font-size: 20px !important;
   }
-  
+
   .ant-typography h2 {
     font-size: 18px !important;
   }
-  
+
   .ant-typography h3 {
     font-size: 16px !important;
   }
-  
-  /* Extra small mobile adjustments */
+
   .ant-menu-item {
     padding: 0 4px !important;
     font-size: 12px;
   }
-  
+
   .hero-section {
     padding: 30px 12px !important;
   }
-  
+
   .hero-section h1 {
     font-size: 24px !important;
   }
-  
+
   .content-section {
     padding: 30px 12px !important;
   }
-  
+
   .qr-code-container .ant-qrcode {
     width: 120px !important;
     height: 120px !important;
   }
 }
 
-/* Custom scrollbar - Light Mode */
+/* ── Custom Scrollbar ────────────────────────────────────────────────────────── */
+
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #eeeeeb;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #d4a574 0%, #b8860b 100%);
+  background: linear-gradient(135deg, #1b3a2d 0%, #042419 100%);
   border-radius: 5px;
-  border: 2px solid #f1f1f1;
+  border: 2px solid #eeeeeb;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #40a9ff 0%, #69c0ff 100%);
+  background: linear-gradient(135deg, #9e4300 0%, #7c3400 100%);
 }
 
-/* Custom scrollbar - Dark Mode */
+/* Dark Mode scrollbar */
 .dark ::-webkit-scrollbar-track {
   background: #1a1a1a;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #e5e5e5 0%, #d4d4d8 100%);
+  background: linear-gradient(135deg, #1b3a2d 0%, #2e4d3f 100%);
   border: 2px solid #1a1a1a;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #d4d4d8 0%, #a1a1aa 100%);
+  background: linear-gradient(135deg, #9e4300 0%, #fc8138 100%);
 }

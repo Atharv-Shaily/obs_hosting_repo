@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px 16px;
-  background: linear-gradient(135deg, #f5f0e8 0%, #e8ddd0 50%, #f0e8d8 100%);
+  background: linear-gradient(135deg, #faf9f7 0%, #f4f4f1 50%, #eeeeeb 100%);
   transition: background 0.3s ease;
 
   &.dark-mode {
@@ -22,12 +22,12 @@
 
 .auth-card {
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 8px;  // Highland Editorial radius (8px for cards)
   padding: 40px 40px 32px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(212, 165, 116, 0.2);
+    0 4px 24px rgba(27, 58, 45, 0.08),
+    0 1px 4px rgba(27, 58, 45, 0.04);
+  border: 1px solid rgba(27, 58, 45, 0.12); // Forest Green border
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
   &.dark-mode {
@@ -79,11 +79,11 @@
   }
 
   .ant-tabs-ink-bar {
-    background: #d4a574;
+    background: #1b3a2d; // Forest Green
   }
 
   .ant-tabs-tab-active .ant-tabs-tab-btn {
-    color: #d4a574 !important;
+    color: #1b3a2d !important; // Forest Green
   }
 }
 
@@ -101,13 +101,13 @@
 }
 
 .auth-toggle-link {
-  color: #d4a574;
+  color: #9e4300; // Campfire Amber
   cursor: pointer;
   font-weight: 600;
   transition: color 0.2s;
 
   &:hover {
-    color: #b8895a;
+    color: #7c3400;
     text-decoration: underline;
   }
 }

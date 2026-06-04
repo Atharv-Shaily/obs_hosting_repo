@@ -1,17 +1,18 @@
 @import '../globals/index.less';
 
-// Variables
-@primary-color: #d4a574;
+// Variables — Highland Editorial Design System
+@primary-color: #1b3a2d;      // Forest Green
+@amber-color:   #9e4300;      // Campfire Amber
 @dark-bg: #0f0f0f;
-@light-bg: #f5f5f5;
+@light-bg: #faf9f7;           // Parchment
 @dark-header-bg: #1a1a1a;
-@light-header-bg: #fff;
+@light-header-bg: rgba(250, 249, 247, 0.97); // Parchment glassmorphism
 @dark-footer-bg: #1a1a1a;
-@light-footer-bg: #f0f2f5;
+@light-footer-bg: #eeeeeb;    // surface-container
 @dark-border: #404040;
-@light-border: #d9d9d9;
+@light-border: #c1c8c2;       // outline-variant
 @dark-text: #a3a3a3;
-@light-text: #666;
+@light-text: #414844;         // on-surface-variant
 @dark-title: #e5e5e5;
 
 // Layout Container
@@ -95,9 +96,9 @@
   z-index: 1000;
 
   &.light {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: @light-header-bg;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 8px rgba(27, 58, 45, 0.08);
   }
 
   &.dark {
@@ -177,7 +178,8 @@
 
     .logo-title {
       margin: 0;
-      color: @primary-color;
+      color: @primary-color; // Forest Green
+      font-family: var(--font-headline);
       transition: color 0.3s ease;
 
       &.dark-mode {
@@ -201,7 +203,7 @@
 // Content Styles
 .ant-layout-content.layout-content {
   padding: 0;
-  background: @light-bg;
+  background: @light-bg; // Parchment
   transition: background-color 0.3s ease;
 
   &.dark {
