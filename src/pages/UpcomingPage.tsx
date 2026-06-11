@@ -114,24 +114,25 @@ const UpcomingPage: React.FC = () => {
       return;
     }
 
-    // Check if user already has an active (Pending or Completed) booking for this trek.
-    // We search in both directions since the DB title may differ slightly from the frontend title.
+    // Block re-booking only if the trek is already COMPLETED (paid and done).
+    // A Pending booking means payment was initiated but not finished (e.g. failed/abandoned)
+    // — the user should be able to retry payment in that case.
     const searchKey = selectedTrek.title.split(' - ')[0].toLowerCase();
-    const alreadyBooked = myBookings.some(
+    const alreadyCompleted = myBookings.some(
       (b) => {
         if (!b.trekId?.title || !b.status) return false;
         const dbTitle = b.trekId.title.toLowerCase();
         return (
           (dbTitle.includes(searchKey) || searchKey.includes(dbTitle.split(' - ')[0])) &&
-          (b.status === 'Pending' || b.status === 'Completed')
+          b.status === 'Completed'
         );
       }
     );
 
-    if (alreadyBooked) {
+    if (alreadyCompleted) {
       Modal.warning({
-        title: 'Already Booked',
-        content: `You already have an active booking for ${selectedTrek.title}. Check your profile for booking details.`,
+        title: 'Trek Already Booked',
+        content: `You have already completed payment for ${selectedTrek.title}. Check your profile for booking details.`,
         okText: 'View Profile',
         cancelText: 'Close',
         okCancel: true,
