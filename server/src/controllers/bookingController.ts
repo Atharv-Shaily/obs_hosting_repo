@@ -31,7 +31,8 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
       res.status(409).json({ message: 'You already have an active booking for this trek.' });
       return;
     }
-    res.status(500).json({ message: 'Server error creating booking.', error });
+    console.error('[createBooking]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -56,6 +57,12 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
       return;
     }
 
+    // Ownership check — only the booking's owner may update its status.
+    if (booking.userId.toString() !== req.user!.id) {
+      res.status(403).json({ message: 'Forbidden: you do not own this booking.' });
+      return;
+    }
+
     const wasAlreadyCompleted = booking.status === 'Completed';
     booking.status = status;
     await booking.save();
@@ -67,7 +74,8 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
 
     res.status(200).json({ message: 'Booking status updated.', booking });
   } catch (error) {
-    res.status(500).json({ message: 'Server error updating booking status.', error });
+    console.error('[updateBookingStatus]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -83,6 +91,7 @@ export const getMyBookings = async (req: Request, res: Response): Promise<void> 
 
     res.status(200).json({ bookings });
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching bookings.', error });
+    console.error('[getMyBookings]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };

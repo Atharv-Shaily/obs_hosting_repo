@@ -2,11 +2,14 @@ import { Resend } from 'resend';
 
 export const sendVerificationEmail = async (to: string, otp: string) => {
   try {
-    // Instantiate inside the function so process.env is loaded by dotenv first
-    const resend = new Resend(process.env.RESEND_API_KEY || 're_dummy_key');
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY is not configured. Cannot send OTP emails.');
+    }
+    const resend = new Resend(apiKey);
 
     const { data, error } = await resend.emails.send({
-      from: 'OBS Team <onboarding@resend.dev>', // Use a verified domain in production
+      from: process.env.EMAIL_FROM || 'OBS Team <onboarding@resend.dev>',
       to: [to],
       subject: 'Welcome to OBS! Verify your email',
       html: `

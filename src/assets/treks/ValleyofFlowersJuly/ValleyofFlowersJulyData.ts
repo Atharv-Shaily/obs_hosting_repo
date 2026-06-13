@@ -84,7 +84,7 @@ export const valleyOfFlowersJulyData: TrekData = {
     totalCostWithTransport: 13750,
     totalCostWithoutTransport: 0,
     registrationFee: 2750,
-    remainingAmountWithTransport: 0,
+    remainingAmountWithTransport: 11000,
     remainingAmountWithoutTransport: 0,
     paymentDeadline: '14 June',
   },

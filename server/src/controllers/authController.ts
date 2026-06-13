@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { OAuth2Client } from 'google-auth-library';
+import validator from 'validator';
 import User from '../models/User';
 import { hashPassword, comparePassword, signToken } from '../services/authService';
 import { sendVerificationEmail } from '../services/emailService';
@@ -20,6 +21,22 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     if (!email || !password) {
       res.status(400).json({ message: 'Email and password are required.' });
+      return;
+    }
+
+    // Validate email format
+    if (!validator.isEmail(email)) {
+      res.status(400).json({ message: 'Please provide a valid email address.' });
+      return;
+    }
+
+    // Enforce password length: minimum 8, maximum 128 characters
+    if (password.length < 8) {
+      res.status(400).json({ message: 'Password must be at least 8 characters long.' });
+      return;
+    }
+    if (password.length > 128) {
+      res.status(400).json({ message: 'Password must not exceed 128 characters.' });
       return;
     }
 
@@ -60,7 +77,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       email: user.email
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error during registration.', error });
+    console.error('[register]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -118,7 +136,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error during login.', error });
+    console.error('[login]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -175,7 +194,8 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error during OTP verification.', error });
+    console.error('[verifyOtp]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -213,7 +233,8 @@ export const resendOtp = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({ message: 'OTP resent successfully.' });
   } catch (error) {
-    res.status(500).json({ message: 'Server error during OTP resend.', error });
+    console.error('[resendOtp]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -277,6 +298,7 @@ export const googleLogin = async (req: Request, res: Response): Promise<void> =>
       },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error during Google login.', error });
+    console.error('[googleLogin]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };

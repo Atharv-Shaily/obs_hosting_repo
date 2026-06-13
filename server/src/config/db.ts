@@ -10,7 +10,7 @@ const connectDB = async (): Promise<void> => {
 
   try {
     const conn = await mongoose.connect(mongoURI);
-    console.log(`MongoDB connected: ${conn.connection.host}`);
+    console.log('MongoDB connected.');
 
     // Sync schema indexes to the database.
     // Wrapped in its own try/catch so a sync failure never crashes the server.

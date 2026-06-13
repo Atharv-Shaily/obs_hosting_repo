@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Radio, Space, Typography, Button, Divider, Card, Row, Col, Alert } from 'antd';
 import { CheckCircleOutlined, WalletOutlined, CreditCardOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
@@ -25,46 +25,58 @@ const BookingModal: React.FC<BookingModalProps> = ({
 }) => {
   const { isDarkMode } = useDarkMode();
   const [alreadyPaidRegistration, setAlreadyPaidRegistration] = useState<boolean>(false);
-  const [withTransportation, setWithTransportation] = useState<boolean>(true);
+  
+  const hasWithTransport = pricing.totalCostWithTransport > 0;
+  const hasWithoutTransport = pricing.totalCostWithoutTransport > 0;
+
+  const [withTransportation, setWithTransportation] = useState<boolean>(hasWithTransport);
   const [paymentType, setPaymentType] = useState<'full' | 'registration'>('registration');
-  const [calculatedAmount, setCalculatedAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Calculate amount based on selections
-  useEffect(() => {
-    let amount = 0;
-
-    if (alreadyPaidRegistration) {
-      // User has already paid registration, show remaining dues
-      if (withTransportation) {
-        amount = pricing.remainingAmountWithTransport;
-      } else {
-        amount = pricing.remainingAmountWithoutTransport;
-      }
-    } else {
-      // User hasn't paid registration yet
-      if (paymentType === 'full') {
-        // Full payment
-        if (withTransportation) {
-          amount = pricing.totalCostWithTransport;
-        } else {
-          amount = pricing.totalCostWithoutTransport;
-        }
-      } else {
-        // Registration only
-        amount = pricing.registrationFee;
-      }
+  // Synchronize withTransportation when modal opens or pricing changes
+  React.useEffect(() => {
+    if (open) {
+      setWithTransportation(pricing.totalCostWithTransport > 0);
     }
+  }, [open, pricing]);
 
-    setCalculatedAmount(amount);
-  }, [alreadyPaidRegistration, withTransportation, paymentType, pricing]);
+  // Derive the display amount from user selections (for UI display only — not sent to server)
+  const calculatedAmount = (() => {
+    if (alreadyPaidRegistration) {
+      return withTransportation
+        ? pricing.remainingAmountWithTransport
+        : pricing.remainingAmountWithoutTransport;
+    }
+    if (paymentType === 'full') {
+      return withTransportation
+        ? pricing.totalCostWithTransport
+        : pricing.totalCostWithoutTransport;
+    }
+    return pricing.registrationFee;
+  })();
+
+  /**
+   * Maps user selections to one of the 5 server-recognised paymentOption keys.
+   * The server resolves this key to the real INR price from the Trek DB record.
+   * The client never sends a raw amount — this eliminates the price-tampering risk.
+   */
+  const getPaymentOption = (): string => {
+    if (alreadyPaidRegistration) {
+      return withTransportation ? 'remainingWithTransport' : 'remainingWithoutTransport';
+    }
+    if (paymentType === 'full') {
+      return withTransportation ? 'fullWithTransport' : 'fullWithoutTransport';
+    }
+    return 'registration';
+  };
 
   const handleBookNow = async () => {
     setLoading(true);
     setErrorMsg(null);
     try {
-      // Call backend to initiate payment and get PayU credentials + signature hash
+      // Send only the intent (which option the user chose) — never the price.
+      // The server resolves the real INR amount from the Trek DB record.
       const data = await api.post<{
         key: string;
         txnid: string;
@@ -78,7 +90,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
         actionUrl: string;
       }>('/api/payments/initiate', {
         trekTitle,
-        amount: calculatedAmount,
+        paymentOption: getPaymentOption(),
       });
 
       // Dynamically submit the form to PayU
@@ -120,7 +132,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleReset = () => {
     setAlreadyPaidRegistration(false);
-    setWithTransportation(true);
+    setWithTransportation(pricing.totalCostWithTransport > 0);
     setPaymentType('registration');
     setErrorMsg(null);
   };
@@ -199,21 +211,29 @@ const BookingModal: React.FC<BookingModalProps> = ({
             className="custom-radio-group"
           >
             <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-              <Radio value={true} className="custom-radio">
+              <Radio value={true} className="custom-radio" disabled={!hasWithTransport}>
                 <div className="radio-content">
-                  <Text strong>With Transportation</Text>
+                  <Text strong style={{ color: !hasWithTransport ? 'rgba(0, 0, 0, 0.25)' : undefined }}>
+                    With Transportation
+                  </Text>
                   <br />
                   <Text type="secondary" style={{ fontSize: '13px' }}>
-                    {transportationRoute} (+₹{pricing.transportationFee})
+                    {hasWithTransport 
+                      ? `${transportationRoute} (+₹${pricing.transportationFee})`
+                      : 'Not available for this trek'}
                   </Text>
                 </div>
               </Radio>
-              <Radio value={false} className="custom-radio">
+              <Radio value={false} className="custom-radio" disabled={!hasWithoutTransport}>
                 <div className="radio-content">
-                  <Text strong>Without Transportation</Text>
+                  <Text strong style={{ color: !hasWithoutTransport ? 'rgba(0, 0, 0, 0.25)' : undefined }}>
+                    Without Transportation
+                  </Text>
                   <br />
                   <Text type="secondary" style={{ fontSize: '13px' }}>
-                    I'll arrange my own transport
+                    {hasWithoutTransport 
+                      ? "I'll arrange my own transport"
+                      : 'Transportation is bundled with this trek'}
                   </Text>
                 </div>
               </Radio>

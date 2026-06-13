@@ -27,7 +27,8 @@ export const getProfile = async (req: Request, res: Response): Promise<void> => 
       },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching profile.', error });
+    console.error('[getProfile]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
 
@@ -46,6 +47,7 @@ export const getLoyaltyHistory = async (req: Request, res: Response): Promise<vo
 
     res.status(200).json({ history });
   } catch (error) {
-    res.status(500).json({ message: 'Server error fetching loyalty history.', error });
+    console.error('[getLoyaltyHistory]', error);
+    res.status(500).json({ message: 'Something went wrong. Please try again.' });
   }
 };
