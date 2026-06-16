@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { Types } from 'mongoose';
 import Booking from '../models/Booking';
-import { processCompletedTrek } from '../services/loyaltyService';
 
 /**
  * POST /api/bookings
@@ -67,14 +66,8 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
       return;
     }
 
-    const wasAlreadyCompleted = booking.status === 'Completed';
     booking.status = status;
     await booking.save();
-
-    // Award loyalty points only on first completion (not when cancelling)
-    if (status === 'Completed' && !wasAlreadyCompleted) {
-      await processCompletedTrek(booking.userId, booking.trekId);
-    }
 
     res.status(200).json({ message: 'Booking status updated.', booking });
   } catch (error) {
