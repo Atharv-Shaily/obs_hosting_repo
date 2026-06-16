@@ -38,16 +38,20 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
 
 /**
  * PATCH /api/bookings/:id/status
- * Updates a booking's status. Triggers loyalty processing when set to "Completed".
- * Body: { status: 'Pending' | 'Completed' }
+ * Allows a user to cancel their own booking only.
+ * Setting status to 'Completed' is NOT allowed here — only the PayU webhook
+ * (payuCallback) may mark a booking as Completed after verifying payment hash.
+ * Body: { status: 'Cancelled' }
  */
 export const updateBookingStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { status } = req.body as { status: 'Pending' | 'Completed' };
+    const { status } = req.body as { status: 'Cancelled' };
 
-    if (!['Pending', 'Completed', 'Cancelled'].includes(status)) {
-      res.status(400).json({ message: "Status must be 'Pending', 'Completed', or 'Cancelled'." });
+    // Users may only cancel their own bookings via this endpoint.
+    // 'Completed' is reserved exclusively for the PayU payment webhook.
+    if (!['Cancelled'].includes(status)) {
+      res.status(403).json({ message: "You may only cancel a booking. Payment completion is handled automatically." });
       return;
     }
 
